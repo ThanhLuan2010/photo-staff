@@ -2,9 +2,12 @@ import React from "react";
 import { GetList } from "../../hook/getList.tsx";
 import moment from "moment";
 import { TypeCouponResult } from "../Dashboard/index.tsx";
+import ReactPaginate from "react-paginate";
+import "./pagination.css";
 function History() {
-  const { data: dataHistory } = GetList<any>({
+  const { data: dataHistory, loadMore } = GetList<any>({
     url: "staff/get-history-request",
+    isLazy: true,
   });
 
   type TypeHistory = {
@@ -15,6 +18,14 @@ function History() {
     date: Date;
     branch: string;
     coupon: TypeCouponResult;
+  };
+
+  interface PageChangeEvent {
+    selected: number;
+  }
+
+  const handlePageChange = ({ selected }: PageChangeEvent) => {
+    loadMore(selected + 1);
   };
 
   const renderHistory = (item: TypeHistory, index: number) => {
@@ -42,7 +53,7 @@ function History() {
       <h1 className="fixed top-0 right-0 w-screen mt-10 text-5xl font-semibold text-center text-primary">
         Lịch sử
       </h1>
-      {dataHistory && dataHistory?.length > 0 && (
+      {dataHistory && dataHistory?.length > 0 ? (
         <table className="w-full bg-red-200 mt-[100px]">
           <tbody>
             <tr className="w-full font-bold text-center border border-primary">
@@ -58,7 +69,36 @@ function History() {
             {dataHistory.map(renderHistory)}
           </tbody>
         </table>
-      )}
+      ):<div className="h-[100px]"></div>}
+
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          padding: 20,
+          boxSizing: "border-box",
+          width: "100%",
+          height: "100%",
+        }}
+      >
+        <ReactPaginate
+          activeClassName={"item active"}
+          breakClassName={"item break-me"}
+          breakLabel={"..."}
+          containerClassName={"pagination"}
+          disabledClassName={"disabled-page"}
+          marginPagesDisplayed={0}
+          nextClassName={"item next "}
+          nextLabel={">"}
+          onPageChange={handlePageChange}
+          pageCount={10000}
+          pageClassName={"item pagination-page "}
+          pageRangeDisplayed={2}
+          previousClassName={"item previous"}
+          previousLabel={"<"}
+        />
+      </div>
     </div>
   );
 }

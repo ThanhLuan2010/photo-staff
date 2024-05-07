@@ -31,6 +31,7 @@ export const request = async (
       Accept: isFormData ? "multipart/form-data" : "application/json",
       "Content-Type": isFormData ? "multipart/form-data" : "application/json",
       Authorization: `Bearer ${auth.token}`,
+      'Access-Control-Allow-Origin': '*'
     },
   };
   let _query = "";
@@ -41,10 +42,6 @@ export const request = async (
   if (body) {
     option["body"] = reqbody;
   }
-  // console.log(
-  //   '====${BASE_URL}${url}${_query?.replace("&", "?")} ===',
-  //   `${BASE_URL}${url}${_query?.replace("&", "?")} `
-  // );
   try {
     const response = await fetch(
       `${BASE_URL}${url}${_query?.replace("&", "?")} `,

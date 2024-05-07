@@ -93,9 +93,9 @@ export default function Login() {
         style={{
           backgroundImage: `url(${images.loginBanner})`,
         }}
-        className="flex items-center justify-center w-screen h-screen bg-red-500"
+        className="flex items-center justify-center w-screen h-screen"
       >
-        <div className="px-20 py-10 text-center bg-white w-fit rounded-2xl">
+        <div className="px-10 py-10 text-center bg-white sm:px-25 w-fit rounded-2xl">
           <strong className="text-primary text-[40px]">LOGIN</strong>
           <div className="flex w-full px-5 py-2 mt-5 border border-gray-500 rounded-full">
             <AiOutlineMail size={25} />
