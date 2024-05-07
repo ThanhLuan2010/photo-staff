@@ -1,0 +1,27 @@
+[
+  {
+    "couponName": "BANBE",
+    "ListPrice": [{ "price": 70000 }, { "price": 100000 }]
+  },
+  {
+    "couponName": "NEW",
+    "ListPrice": [
+      { "price": 20000 },
+      { "price": 50000 },
+      { "price": 70000 },
+      { "price": 100000 }
+    ]
+  },
+  {
+    "couponName": "BIRTHDAY",
+    "ListPrice": [{ "price": 70000 }]
+  },
+  {
+    "couponName": "GIGA",
+    "ListPrice": [{ "price": 20000 }]
+  },
+  {
+    "couponName": "STUDENT",
+    "ListPrice": [{ "price": 20000 }]
+  }
+]
