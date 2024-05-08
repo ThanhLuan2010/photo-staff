@@ -1,7 +1,7 @@
 import React from "react";
 import { GetList } from "../../hook/getList.tsx";
 import moment from "moment";
-import { TypeCouponResult } from "../Dashboard/index.tsx";
+import { TypeCouponResult } from "../admin/Dashboard/index.tsx";
 import ReactPaginate from "react-paginate";
 import "./pagination.css";
 function History() {

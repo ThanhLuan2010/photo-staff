@@ -1,24 +1,31 @@
 import React from "react";
-import { AiFillCloseCircle } from "react-icons/ai";
+import { AiFillCloseCircle, AiFillEnvironment } from "react-icons/ai";
 import {
   FaChartLine,
   FaClock,
+  FaCodeBranch,
+  FaRegImages,
   FaSignOutAlt,
   FaTicketAlt,
   FaUser,
 } from "react-icons/fa";
 import { images } from "../../assets/index.tsx";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { setIsLogin, setToken, setUserInfo } from "../../store/slice/auth.slice.tsx";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  authSelect,
+  setIsLogin,
+  setToken,
+  setUserInfo,
+} from "../../store/slice/auth.slice.tsx";
 
-const data = [
+const dataRouteStaff = [
   {
     lable: "Request Coupon",
     id: 1,
     route: [
       {
-        path: "/dashboard",
+        path: "/requestCoupon",
         lable: "Request Coupon",
         id: 1,
         icon: <FaTicketAlt />,
@@ -31,6 +38,111 @@ const data = [
     route: [{ path: "/history", lable: "History", id: 2, icon: <FaClock /> }],
   },
 ];
+
+const dataRouteAdmin = [
+  {
+    lable: "Thống Kê",
+    id: 1,
+    route: [
+      { path: "/dashboard", lable: "Thống kê", id: 1, icon: <FaChartLine /> },
+    ],
+  },
+  {
+    lable: "Người dùng",
+    id: 2,
+    route: [
+      { path: "/admin/customer", lable: "Người dùng", id: 2, icon: <FaUser /> },
+    ],
+  },
+  {
+    lable: "Chi nhánh",
+    id: 3,
+    route: [
+      {
+        path: "/admin/branch",
+        lable: "Danh sách chi nhánh",
+        id: 3,
+        icon: <FaCodeBranch />,
+      },
+      {
+        path: "/admin/add-branch",
+        lable: "Thêm chi nhánh",
+        id: 4,
+        icon: <FaCodeBranch />,
+      },
+    ],
+  },
+
+  {
+    lable: "Frame",
+    id: 4,
+    route: [
+      {
+        path: "/admin/frame",
+        lable: "Danh sách Frame",
+        id: 5,
+        icon: <FaRegImages />,
+      },
+      {
+        path: "/admin/add-frame",
+        lable: "Thêm Frame",
+        id: 6,
+        icon: <FaRegImages />,
+      },
+      {
+        path: "/admin/frame-category",
+        lable: "Danh mục Frame",
+        id: 7,
+        icon: <FaRegImages />,
+      },
+      {
+        path: "/admin/add-category",
+        lable: "Thêm danh mục",
+        id: 8,
+        icon: <FaRegImages />,
+      },
+    ],
+  },
+
+  {
+    lable: "Sự kiện",
+    id: 5,
+    route: [
+      {
+        path: "/admin/list-event",
+        lable: "Danh sách sự kiện",
+        id: 9,
+        icon: <AiFillEnvironment />,
+      },
+      {
+        path: "/admin/add-event",
+        lable: "Thêm sự kiện",
+        id: 10,
+        icon: <AiFillEnvironment />,
+      },
+    ],
+  },
+
+  {
+    lable: "Banner",
+    id: 5,
+    route: [
+      {
+        path: "/admin/list-banner",
+        lable: "Danh sách banner",
+        id: 11,
+        icon: <FaRegImages />,
+      },
+      {
+        path: "/admin/add-banner",
+        lable: "Thêm banner",
+        id: 12,
+        icon: <FaRegImages />,
+      },
+    ],
+  },
+];
+
 interface Props {
   setIsOpen: (isOpen: boolean) => void;
   isOpen: boolean;
@@ -38,6 +150,8 @@ interface Props {
 export default function MobileNavBar({ isOpen, setIsOpen }: Props) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { userInfo } = useSelector(authSelect);
+  const dataNav = userInfo?.role === "ADMIN" ? dataRouteAdmin : dataRouteStaff;
   const navAnimation = isOpen ? "translate-x-0" : "translate-x-[-100%]";
   return (
     <div
@@ -57,7 +171,7 @@ export default function MobileNavBar({ isOpen, setIsOpen }: Props) {
           className="w-[30px] h-[30px] absolute right-2 top-2 cursor-pointer text-white"
         />
         <div className="mt-5">
-          {data.map((item, index) => {
+          {dataNav.map((item, index) => {
             return (
               <div className="px-5 py-0 rounded-xl" key={index + "navRoute"}>
                 {item.route.length > 1 && (
