@@ -100,7 +100,7 @@ const AddBanner = (props: any) => {
           const res = await request("edit-home-banner", body, "POST");
           notify(res?.message || "Đã có lỗi xảy ra, vui lòng thử lại sau");
         } else {
-          alert("trống");
+          // alert("trống");
           // const resImg = await request(
           //   "upload/uploadBase64",
           //   { file: selectedImage?.replace("data:image/png;base64,", "") },
