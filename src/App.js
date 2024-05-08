@@ -5,6 +5,7 @@ import Login from "./Pages/Login/index.tsx";
 import DashBoard from "./Pages/Dashboard/index.tsx";
 import MainLayout from "./component/MainLayout/index.tsx";
 import History from "./Pages/History/index.tsx";
+import RequestCoupon from "./Pages/RequestCouon/index.tsx";
 function App() {
   const loading = false;
   return (
@@ -19,6 +20,16 @@ function App() {
             element={
               <MainLayout>
                 <DashBoard />
+              </MainLayout>
+            }
+          />
+          <Route
+            exact
+            path="/requestCoupon"
+            name="Request Coupon"
+            element={
+              <MainLayout>
+                <RequestCoupon />
               </MainLayout>
             }
           />

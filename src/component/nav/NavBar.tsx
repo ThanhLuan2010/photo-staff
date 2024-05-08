@@ -14,7 +14,19 @@ const data = [
     id: 1,
     route: [
       {
-        path: "/dashboard",
+        path: "/requestCoupon",
+        lable: "Thống Kê",
+        id: 1,
+        icon: <FaTicketAlt />,
+      },
+    ],
+  },
+  {
+    lable: "Request Coupon",
+    id: 1,
+    route: [
+      {
+        path: "/requestCoupon",
         lable: "Request Coupon",
         id: 1,
         icon: <FaTicketAlt />,

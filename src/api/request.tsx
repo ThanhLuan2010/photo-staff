@@ -23,7 +23,7 @@ export const request = async (
   params?: any,
   isFormData?: boolean
 ) => {
-  const {auth} = store.getState("auth")
+  const { auth } = store.getState("auth");
   let option: optionType = {
     method: method ? method : "GET",
     params: params ? params : {},
@@ -31,7 +31,7 @@ export const request = async (
       Accept: isFormData ? "multipart/form-data" : "application/json",
       "Content-Type": isFormData ? "multipart/form-data" : "application/json",
       Authorization: `Bearer ${auth.token}`,
-      'Access-Control-Allow-Origin': '*'
+      "Access-Control-Allow-Origin": "*",
     },
   };
   let _query = "";
@@ -46,7 +46,7 @@ export const request = async (
     const response = await fetch(
       `${BASE_URL}${url}${_query?.replace("&", "?")} `,
       // `http://phototimesrv.duckdns.org:3000/v1/${url}${_query?.replace('&', '?')} `,
-      option
+      { ...option, mode: "cors" }
     );
     if (response.status === 401) {
       // xử lý trở về login
