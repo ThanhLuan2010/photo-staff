@@ -7,6 +7,7 @@ import {
   FaSignOutAlt,
   FaTicketAlt,
   FaUser,
+  FaHistory,
 } from "react-icons/fa";
 import { images } from "../../assets/index.tsx";
 import { useNavigate } from "react-router-dom";
@@ -51,6 +52,18 @@ const dataRouteAdmin = [
     id: 2,
     route: [
       { path: "/admin/customer", lable: "Người dùng", id: 2, icon: <FaUser /> },
+    ],
+  },
+  {
+    lable: "Lịch sử",
+    id: 7,
+    route: [
+      {
+        path: "/admin/history-staff-request-coupon",
+        lable: "Lịch sử tạo coupon",
+        id: 13,
+        icon: <FaHistory />,
+      },
     ],
   },
   {
@@ -123,8 +136,8 @@ const dataRouteAdmin = [
   },
 
   {
-    lable: "Banner",
-    id: 5,
+    lable: "Banners",
+    id: 6,
     route: [
       {
         path: "/admin/list-banner",

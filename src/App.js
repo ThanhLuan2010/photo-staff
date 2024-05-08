@@ -21,6 +21,8 @@ import ListBanner from "./Pages/admin/list-banner/index.tsx";
 import AddBanner from "./Pages/admin/add-banner/index.tsx";
 import { useSelector } from "react-redux";
 import { authSelect } from "./store/slice/auth.slice.tsx";
+import HistoryStaffRequest from "./Pages/admin/HistoryStaffRequest/index.tsx";
+import DetailRequestCouon from "./Pages/admin/DetailRequestCouon/index.tsx";
 function App() {
   const loading = false;
   const { userInfo } = useSelector(authSelect);
@@ -29,6 +31,8 @@ function App() {
     <HashRouter>
       <Suspense fallback={loading}>
         <Routes>
+          <Route exact path="/" name="Login Page" element={<Login />} />
+
           {userInfo?.role === "STAFF" ? (
             <>
               <Route
@@ -54,7 +58,6 @@ function App() {
             </>
           ) : userInfo?.role === "ADMIN" ? (
             <>
-              <Route exact path="/" name="Login Page" element={<Login />} />
               <Route
                 exact
                 path="/dashboard"
@@ -203,6 +206,27 @@ function App() {
                 element={
                   <MainLayout>
                     <AddBanner />
+                  </MainLayout>
+                }
+              />
+              <Route
+                exact
+                path="/admin/history-staff-request-coupon"
+                name="add banner"
+                element={
+                  <MainLayout>
+                    <HistoryStaffRequest />
+                  </MainLayout>
+                }
+              />
+
+              <Route
+                exact
+                path="/admin/detail-request-couon"
+                name="add banner"
+                element={
+                  <MainLayout>
+                    <DetailRequestCouon />
                   </MainLayout>
                 }
               />
