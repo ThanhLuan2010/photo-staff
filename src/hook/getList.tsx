@@ -8,6 +8,7 @@ interface GetListProps {
   dependencies?: any;
   isLazy?: boolean;
   dependencies2?: any;
+  dependencies1?: any;
 }
 export function GetList<T>({
   url,
@@ -15,6 +16,7 @@ export function GetList<T>({
   dependencies,
   isLazy,
   dependencies2,
+  dependencies1,
 }: GetListProps): {
   data: T | null;
   loading: boolean;
@@ -29,7 +31,7 @@ export function GetList<T>({
   const [error, setError] = useState<Error | null>(null);
   useEffect(() => {
     getData();
-  }, [dependencies, dependencies2]);
+  }, [dependencies, dependencies2, dependencies1]);
 
   const search = (searchQuery: string) => {
     getData(1, searchQuery);

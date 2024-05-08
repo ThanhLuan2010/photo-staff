@@ -5,6 +5,7 @@ interface DropdownProps {
   onSelectItem: (item: any) => void;
   filedKey: string;
   value: string | undefined | null;
+  disabled?: boolean;
 }
 
 export const Dropdown: React.FC<DropdownProps> = (props) => {
@@ -25,6 +26,7 @@ export const Dropdown: React.FC<DropdownProps> = (props) => {
           type="button"
           className="px-4 py-2 text-[pink] border-[pink] border-[1.5px] w-full rounded-md"
           onClick={toggleDropdown}
+          disabled={props.disabled}
         >
           {props.value ? props.value : props?.placeholder}
         </button>
