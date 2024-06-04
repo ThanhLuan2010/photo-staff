@@ -35,7 +35,10 @@ const Dashboard = () => {
   const [date, setdate] = useState<any>(moment().subtract(1, "days"));
   const [endDate, setEndDate] = useState<any>(moment().subtract(1, "days"));
   const { data: listEvent } = GetList<any>({ url: "home/get-list-event" });
-  const { data: listBranch } = GetList<any>({ url: "home/get-list-branch" });
+  const { data: listBranch } = GetList<any>({
+    url: "home/get-list-branch",
+    params: { limit: 30 },
+  });
   const { data: dataCoupon, reLoad: handleReloadCoupon } =
     GetList<dataCouponType>({
       dependencies: date,
@@ -97,6 +100,7 @@ const Dashboard = () => {
       setTotalCouponInstore(total7);
     }
   }, [dataCoupon]);
+  console.log("=====dataCoupon====", dataCoupon);
 
   useEffect(() => {}, []);
 

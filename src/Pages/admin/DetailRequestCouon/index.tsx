@@ -146,7 +146,7 @@ function DetailRequestCouon(): React.JSX.Element {
 
         <div className="mt-5">
           {item?.url && (
-            <img src={item?.url} className="object-contain w-full" />
+            <img src={item?.url?.replace("http://27.71.26.120","https://phototimevn.com")} className="object-contain w-full" />
           )}
         </div>
 

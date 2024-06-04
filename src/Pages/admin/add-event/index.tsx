@@ -9,7 +9,7 @@ import "react-datetime-picker/dist/DateTimePicker.css";
 import "react-calendar/dist/Calendar.css";
 import "react-clock/dist/Clock.css";
 import * as Yup from "yup";
-import { request } from "../../../api/request.tsx";
+import { BASE_URL, request } from "../../../api/request.tsx";
 import LoadingWrap from "../../../component/LoadingWrap.tsx";
 import React from "react";
 import ReactQuill from "react-quill";
@@ -76,10 +76,16 @@ const AddEvent = () => {
     setLoading(true);
     setSelectedImage(URL.createObjectURL(event.target.files[0]));
     const formData = new FormData();
-    formData.append("file", event.target.files[0]);
+    formData.append("image", event.target.files[0]);
 
     try {
-      const res = await fetch("http://27.71.26.120:8081/Image", {
+      // const res = await fetch("http://27.71.26.120:8081/Image", {
+      //   method: "POST", 
+      //   body: formData,
+      //   // dataType: 'jsonp',
+      // });
+
+      const res = await fetch(`${BASE_URL}upload/upload`, {
         method: "POST",
         body: formData,
         // dataType: 'jsonp',
@@ -181,7 +187,7 @@ const AddEvent = () => {
             timeStart: timeStart,
             timeEnd: timeEnd,
           };
-          const res = await request("home/edit-branch", body, "POST");
+          const res = await request("home/edit-event", body, "POST");
           notify(res?.message || "Đã có lỗi xảy ra, vui lòng thử lại sau");
         } else {
           alert("trống");
@@ -277,7 +283,7 @@ const AddEvent = () => {
             <div>
               <h2>Ảnh đã chọn:</h2>
               <img
-                src={selectedImage}
+                src={selectedImage?.replace("http://27.71.26.120","https://phototimevn.com")}
                 alt="Selected"
                 style={{ maxWidth: "15%" }}
               />

@@ -55,6 +55,16 @@ function App() {
                   </MainLayout>
                 }
               />
+              <Route
+                exact
+                path="/admin/detail-request-couon"
+                name="add banner"
+                element={
+                  <MainLayout>
+                    <DetailRequestCouon />
+                  </MainLayout>
+                }
+              />
             </>
           ) : userInfo?.role === "ADMIN" ? (
             <>

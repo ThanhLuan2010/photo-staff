@@ -29,7 +29,7 @@ const BranchItems: React.FC<CustomerProps> = ({ item, index }) => {
       <div className="items-center w-full text-center">
         <img
           className="w-full h-[200px] md:h-[200px] lg:h-[200px] sm:h-[200px] rounded-tr-[15px] rounded-tl-[15px]"
-          src={item?.url}
+          src={item?.url?.replace("http://27.71.26.120","https://phototimevn.com")}
         />
         <div>{item?.name}</div>
       </div>

@@ -341,7 +341,7 @@ const FormControl = (props: any) => {
             <div>
               <h2>Ảnh đã chọn:</h2>
               <img
-                src={selectedImage}
+                src={selectedImage?.replace("http://27.71.26.120","https://phototimevn.com")}
                 alt="Selected"
                 style={{ maxWidth: "15%" }}
               />

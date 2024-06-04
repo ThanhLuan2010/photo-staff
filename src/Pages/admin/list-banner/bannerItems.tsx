@@ -28,7 +28,7 @@ const CustomerItems: React.FC<CustomerProps> = ({ item, index }) => {
       cursor-pointer
       "
     >
-      <img src={item?.url} className="object-contain h-[200px]" />
+      <img src={item?.url?.replace("http://27.71.26.120","https://phototimevn.com")} className="object-contain h-[200px]" />
     </div>
   );
 };
