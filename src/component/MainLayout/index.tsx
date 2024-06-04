@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 interface MainLayoutProps {
   children: any;
 }
-const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
+const MainLayout : React.FC<MainLayoutProps> = ({ children }) => {
   const [isOpen, setIsOpen] = React.useState<boolean>(false);
   const { isLogin } = useSelector(authSelect);
   const navigate = useNavigate();
@@ -39,3 +39,11 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
 };
 
 export default MainLayout;
+
+
+
+<>
+header
+<>body</>
+footer
+</>

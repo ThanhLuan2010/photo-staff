@@ -67,7 +67,12 @@ export default function Login() {
         dispatch(setIsLogin(true));
         dispatch(setToken(response.data.token));
         dispatch(setUserInfo(response.data.user));
-        navigate("/dashboard");
+        if (response.data.user?.role === "STAFF") {
+          navigate("/requestCoupon");
+        }
+        if (response.data.user?.role === "ADMIN") {
+          navigate("/dashboard");
+        }
       }
       notify(response?.message || "Đã có lỗi xảy ra");
       setLoading(false);
