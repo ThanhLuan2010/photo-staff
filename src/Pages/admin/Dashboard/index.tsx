@@ -115,7 +115,6 @@ const Dashboard = () => {
     getCard();
   }, []);
 
-
   const getCard = async () => {
     const respone = await request("coupon/get-coupon-count", null, "GET");
     setCouponData(respone?.data);
@@ -325,7 +324,7 @@ const Dashboard = () => {
                   <div>
                     {dataCoupon?.recordset?.map((item: any, index: number) => (
                       <div
-                        className="border-b-[1px] h-[40px] border-[pink] items-center flex justify-center w-[150px] md:w-auto px-3 text-center py-3"
+                        className="border-b-[1px] h-[40px] border-[pink] items-center flex justify-center w-[150px] px-3 text-center py-3"
                         key={index + "group"}
                       >
                         <div>{item?.GROUP_NAME}</div>
