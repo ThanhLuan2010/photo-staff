@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import * as XLSX from "xlsx";
 import { GetList } from "../../../hook/getList.tsx";
 import Card from "./card.tsx";
+import { request } from "../../../api/request.tsx";
 
 type dataCouponType = {
   recordset: any;
@@ -28,6 +29,10 @@ type couponRecord = {
 type coutRegisterType = {
   count: number;
 };
+interface CardData {
+  Category: string;
+  Count: number;
+}
 const Dashboard = () => {
   const { data: dataUser } = GetList<dataUserActiveType>({
     url: "users/getListUserActive",
@@ -104,6 +109,17 @@ const Dashboard = () => {
 
   useEffect(() => {}, []);
 
+  useEffect(() => {
+    getCard();
+  }, []);
+
+  const [couponData, setCouponData] = useState<CardData[]>([]);
+
+  const getCard = async () => {
+    const respone = await request("coupon/get-coupon-count", null, "GET");
+    setCouponData(respone?.data);
+  };
+
   const onExportFile = (): void => {
     const TotalData = dataCoupon?.recordset?.concat({
       GROUP_ID: "Tổng",
@@ -163,6 +179,77 @@ const Dashboard = () => {
         <Card lable="Sự kiện" value={listEvent?.length || 0} />
         <Card lable="Chi nhánh" value={listBranch?.length || 0} />
       </div>
+
+      <div className=" mt-2 ">
+        {/* {data.map((item, index) => (
+          <Card key={index} lable={item.Category} value={item.Count} />
+        ))} */}
+        <h1 className="mt-10 mb-2 font-bold text-[pink] text-2xl uppercase">
+          Số lượng Coupon trong kho
+        </h1>
+        <table>
+          <tbody>
+            <tr className="border-b-[3px] border-[pink] text-[pink] font-bold">
+              <th className="text-center ">Category</th>
+              <th className="text-center">Price</th>
+              <th className="text-center">Coupon</th>
+            </tr>
+            <tr>
+              <td className="border-r-[1px] border-[pink] border-l-[1px] ">
+                {couponData?.length > 0 && (
+                  <div>
+                    {couponData?.map((item: any, index: number) => {
+                      return (
+                        <div
+                          className="border-b-[1px] h-[40px] border-[pink] items-center flex justify-center w-[150px]"
+                          key={index + "coupon"}
+                        >
+                          <div>{item?.Category}</div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </td>
+
+              <td className="border-r-[1px] border-[pink]">
+                {couponData.length > 0 && (
+                  <div>
+                    {couponData?.map((item: any, index: number) => {
+                      return (
+                        <div
+                          className="border-b-[1px] h-[40px] border-[pink] items-center flex justify-center w-[150px]"
+                          key={index + "coupon"}
+                        >
+                          <div>{item?.Price}</div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </td>
+
+              <td className="border-r-[1px] border-[pink]">
+                {couponData.length > 0 && (
+                  <div className="items-center justify-center flex-col w-[150px]">
+                    {couponData?.map((item: any, index: number) => {
+                      return (
+                        <div
+                          className="border-b-[1px] h-[40px] border-[pink] items-center flex justify-center"
+                          key={index + "coupon"}
+                        >
+                          <div>{item?.Count}</div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
       <h1 className="mt-10 font-bold text-[pink] text-2xl">THỐNG KÊ</h1>
 
       <div className="flex gap-5 my-3 ">
@@ -203,6 +290,7 @@ const Dashboard = () => {
               <td className="text-center">GROUP NAME</td>
               <td className="text-center">QUANTITY</td>
               <td className="text-center">CP20K</td>
+              <td className="text-center">CP30K</td>
               <td className="text-center">CP50K</td>
               <td className="text-center">CP70K</td>
               <td className="text-center">CP100K</td>

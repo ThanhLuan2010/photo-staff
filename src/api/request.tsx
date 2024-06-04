@@ -23,6 +23,8 @@ export const request = async (
   params?: any,
   isFormData?: boolean
 ) => {
+  // const state = store.getState();
+  // const auth = state.auth;
   const { auth } = store.getState("auth");
   let option: optionType = {
     method: method ? method : "GET",

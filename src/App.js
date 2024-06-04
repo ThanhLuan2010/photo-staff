@@ -1,5 +1,5 @@
 import "./App.css";
-import { HashRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, HashRouter, Route, Routes } from "react-router-dom";
 import { Suspense, React } from "react";
 import Login from "./Pages/Login/index.tsx";
 import DashBoard from "./Pages/admin/Dashboard/index.tsx";
@@ -28,7 +28,7 @@ function App() {
   const { userInfo } = useSelector(authSelect);
   // const dataNav = userInfo?.role === "ADMIN" ? dataRouteAdmin : dataRouteStaff;
   return (
-    <HashRouter>
+    <BrowserRouter>
       <Suspense fallback={loading}>
         <Routes>
           <Route exact path="/" name="Login Page" element={<Login />} />
@@ -244,7 +244,7 @@ function App() {
           ) : null}
         </Routes>
       </Suspense>
-    </HashRouter>
+    </BrowserRouter>
   );
 }
 
