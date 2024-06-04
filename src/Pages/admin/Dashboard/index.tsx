@@ -21,6 +21,7 @@ type couponRecord = {
   SALES_QTY: any;
   USE_COUPON: any;
   USE_COUPON_20k: any;
+  USE_COUPON_30k: any;
   USE_COUPON_50k: any;
   USE_COUPON_70k: any;
   USE_COUPON_100k: any;
@@ -65,10 +66,12 @@ const Dashboard = () => {
   const [totalQuanlity, setTotalQuanlity] = useState(0);
   const [totalCoupon, setTotalCoupon] = useState(0);
   const [totalCoupon20, setTotalCoupon20] = useState(0);
+  const [totalCoupon30, setTotalCoupon30] = useState(0);
   const [totalCoupon50, setTotalCoupon50] = useState(0);
   const [totalCoupon70, setTotalCoupon70] = useState(0);
   const [totalCoupon100, setTotalCoupon100] = useState(0);
   const [totalCouponInstore, setTotalCouponInstore] = useState(0);
+  const [couponData, setCouponData] = useState<CardData[]>([]);
 
   useEffect(() => {
     if (dataCoupon?.recordset?.length > 0) {
@@ -79,26 +82,31 @@ const Dashboard = () => {
       let total5 = 0;
       let total6 = 0;
       let total7 = 0;
+      let total8 = 0;
       dataCoupon?.recordset?.forEach((item: couponRecord) => {
         const temp7 =
           parseInt(item?.USE_COUPON) -
           parseInt(
             item?.USE_COUPON_100k +
               item?.USE_COUPON_20k +
+              item?.USE_COUPON_30k +
               item?.USE_COUPON_50k +
               item?.USE_COUPON_70k
           );
         total1 += parseInt(item?.SALES_QTY);
         total2 += parseInt(item?.USE_COUPON);
         total3 += parseInt(item?.USE_COUPON_20k);
+        total8 += parseInt(item?.USE_COUPON_30k);
         total4 += parseInt(item?.USE_COUPON_50k);
         total5 += parseInt(item?.USE_COUPON_70k);
         total6 += parseInt(item?.USE_COUPON_100k);
+
         total7 += temp7;
       });
       setTotalQuanlity(total1);
       setTotalCoupon(total2);
       setTotalCoupon20(total3);
+      setTotalCoupon30(total8);
       setTotalCoupon50(total4);
       setTotalCoupon70(total5);
       setTotalCoupon100(total6);
@@ -107,7 +115,14 @@ const Dashboard = () => {
   }, [dataCoupon]);
   console.log("=====dataCoupon====", dataCoupon);
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    getCard();
+  }, []);
+
+  const getCard = async () => {
+    const respone = await request("coupon/get-coupon-count", null, "GET");
+    setCouponData(respone?.data);
+  };
 
   useEffect(() => {
     getCard();
@@ -127,6 +142,7 @@ const Dashboard = () => {
       SALES_QTY: totalQuanlity,
       USE_COUPON: totalCoupon,
       USE_COUPON_20k: totalCoupon20,
+      USE_COUPON_30k: totalCoupon30,
       USE_COUPON_50k: totalCoupon50,
       USE_COUPON_70k: totalCoupon70,
       USE_COUPON_100k: totalCoupon100,
@@ -137,6 +153,7 @@ const Dashboard = () => {
         GROUP_NAME: item?.GROUP_NAME,
         QUANTITY: item?.SALES_QTY,
         CP20: item?.USE_COUPON_20k,
+        CP30: item?.USE_COUPON_30k,
         CP50: item?.USE_COUPON_50k,
         CP70: item?.USE_COUPON_70k,
         CP100: item?.USE_COUPON_100k,
@@ -144,6 +161,7 @@ const Dashboard = () => {
           item?.USE_COUPON -
           (item?.USE_COUPON_100k +
             item?.USE_COUPON_20k +
+            item?.USE_COUPON_30k +
             item?.USE_COUPON_50k +
             item?.USE_COUPON_70k),
         TOTAL_COUPON: item?.USE_COUPON,
@@ -321,7 +339,7 @@ const Dashboard = () => {
                   <div>
                     {dataCoupon?.recordset?.map((item: any, index: number) => (
                       <div
-                        className="border-b-[1px] h-[40px] border-[pink] items-center flex justify-center w-[150px] md:w-auto px-3 text-center py-3"
+                        className="border-b-[1px] h-[40px] border-[pink] items-center flex justify-center w-[150px] px-3 text-center py-3"
                         key={index + "group"}
                       >
                         <div>{item?.GROUP_NAME}</div>
@@ -365,6 +383,26 @@ const Dashboard = () => {
                     })}
                     <div className="bg-[pink] w-[70px] text-center">
                       {totalCoupon20}
+                    </div>
+                  </div>
+                )}
+              </td>
+
+              <td className="border-r-[1px] border-[pink]">
+                {dataCoupon?.recordset?.length > 0 && (
+                  <div>
+                    {dataCoupon?.recordset?.map((item: any, index: number) => {
+                      return (
+                        <div
+                          className="border-b-[1px] h-[40px] border-[pink] items-center flex justify-center w-[70px]"
+                          key={index + "group"}
+                        >
+                          <div>{item?.USE_COUPON_30k}</div>
+                        </div>
+                      );
+                    })}
+                    <div className="bg-[pink] w-[70px] text-center">
+                      {totalCoupon30}
                     </div>
                   </div>
                 )}
@@ -438,6 +476,7 @@ const Dashboard = () => {
                           {item?.USE_COUPON -
                             (item?.USE_COUPON_100k +
                               item?.USE_COUPON_20k +
+                              item?.USE_COUPON_30k +
                               item?.USE_COUPON_50k +
                               item?.USE_COUPON_70k)}
                         </div>
