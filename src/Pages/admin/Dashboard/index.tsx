@@ -124,17 +124,6 @@ const Dashboard = () => {
     setCouponData(respone?.data);
   };
 
-  useEffect(() => {
-    getCard();
-  }, []);
-
-  const [couponData, setCouponData] = useState<CardData[]>([]);
-
-  const getCard = async () => {
-    const respone = await request("coupon/get-coupon-count", null, "GET");
-    setCouponData(respone?.data);
-  };
-
   const onExportFile = (): void => {
     const TotalData = dataCoupon?.recordset?.concat({
       GROUP_ID: "Tổng",
@@ -167,6 +156,7 @@ const Dashboard = () => {
         TOTAL_COUPON: item?.USE_COUPON,
       };
     });
+    
     const worksheet = XLSX.utils.json_to_sheet(finalData);
     // Định nghĩa style cho hàng cuối
     worksheet["A1"].s = {
@@ -198,7 +188,7 @@ const Dashboard = () => {
         <Card lable="Chi nhánh" value={listBranch?.length || 0} />
       </div>
 
-      <div className=" mt-2 ">
+      <div className="mt-2 ">
         {/* {data.map((item, index) => (
           <Card key={index} lable={item.Category} value={item.Count} />
         ))} */}

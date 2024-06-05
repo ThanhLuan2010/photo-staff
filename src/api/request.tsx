@@ -6,8 +6,8 @@ export function objectToFormData(obj: any) {
   }
   return formData;
 }
-export const BASE_URL = "https://membershipbe.phototimevn.com/v1/";
-// export const BASE_URL = "http://localhost:3000/v1/";
+// export const BASE_URL = "https://membershipbe.phototimevn.com/v1/";
+export const BASE_URL = "http://localhost:3000/v1/";
 
 type optionType = {
   method?: string;

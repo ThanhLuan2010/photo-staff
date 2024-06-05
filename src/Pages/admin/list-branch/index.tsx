@@ -12,7 +12,7 @@ interface PageChangeEvent {
 
 const ListBranch = () => {
   const { data, loadMore, search } = GetList<any>({
-    url: "home/get-list-branch",
+    url: "home/get-list-branch?limit=100",
     isLazy: false,
   });
   const [searchValue, setSearchValue] = useState("");
@@ -67,7 +67,7 @@ const ListBranch = () => {
         {data?.length > 0 && data?.map(renderUser)}
       </div>
 
-      <div
+      {/* <div
         style={{
           display: "flex",
           flexDirection: "column",
@@ -94,7 +94,7 @@ const ListBranch = () => {
           previousClassName={"item previous"}
           previousLabel={"<"}
         />
-      </div>
+      </div> */}
     </div>
   );
 };

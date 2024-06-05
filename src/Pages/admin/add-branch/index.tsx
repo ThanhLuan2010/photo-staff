@@ -6,7 +6,7 @@ import "react-quill/dist/quill.snow.css";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import * as Yup from "yup";
-import { request } from "../../../api/request.tsx";
+import { BASE_URL, request } from "../../../api/request.tsx";
 import LoadingWrap from "../../../component/LoadingWrap.tsx";
 import React from "react";
 import { useLocation } from "react-router-dom";
@@ -19,10 +19,10 @@ const validationSchemaRegister = Yup.object().shape({
   addressEn: Yup.string().required("Vui lòng điền địa chỉ"),
   addressKo: Yup.string().required("Vui lòng điền địa chỉ"),
   linkgoogleMap: Yup.string().required("Vui lòng điền link bản đồ"),
-  description: Yup.string().required("Vui lòng điền mô tả cửa hàng"),
-  descriptionEn: Yup.string().required("Vui lòng điền mô tả cửa hàng"),
-  descriptionKo: Yup.string().required("Vui lòng điền mô tả cửa hàng"),
-});
+  description: Yup.string(),
+  descriptionEn: Yup.string(),
+  descriptionKo: Yup.string(),
+})
 
 interface InputForm {
   name: string;
@@ -32,9 +32,9 @@ interface InputForm {
   addressEn: string;
   addressKo: string;
   linkgoogleMap: string;
-  description: string;
-  descriptionEn: string;
-  descriptionKo: string;
+  description?: string;
+  descriptionEn?: string;
+  descriptionKo?: string;
   url?: string;
   id?: any;
 }
@@ -80,10 +80,10 @@ const FormControl = (props: any) => {
     setLoading(true);
     setSelectedImage(URL.createObjectURL(event.target.files[0]));
     const formData = new FormData();
-    formData.append("file", event.target.files[0]);
+    formData.append("image", event.target.files[0]);
 
     try {
-      const res = await fetch("http://27.71.26.120:8081/Image", {
+      const res = await fetch(`${BASE_URL}upload/upload`, {
         method: "POST",
         body: formData,
         // dataType: 'jsonp',

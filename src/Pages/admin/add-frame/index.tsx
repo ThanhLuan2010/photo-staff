@@ -140,7 +140,9 @@ const CreateFrame = () => {
 
   const onSubmit = async (data: IFormInput) => {
     setLoading(true);
-    if (selectedImage) {
+    if (isUpdate) {
+      onUpdate(data);
+    } else if (selectedImage) {
       const body = {
         name: data.name,
         nameKo: data.nameKo,
@@ -161,6 +163,37 @@ const CreateFrame = () => {
         const res = await request("frame/create-frame", body, "POST");
         notify(res?.message || "Đã có lỗi xảy ra");
       }
+    } else {
+      notify("Vui lòng chọn hình ảnh");
+    }
+    setLoading(false);
+  };
+
+  const onUpdate = async (_data: any) => {
+    setLoading(true);
+    if (selectedImage) {
+      if (selectedImage)
+        if (
+          selectedImage?.includes("http://") ||
+          selectedImage?.includes("https://")
+        ) {
+          const body = {
+            name: data.name,
+            nameKo: data.nameKo,
+            nameEn: data.nameEn,
+            url: selectedImage,
+            timeStart: startDate,
+            timeEnd: endDate,
+            listFrame: [],
+            categoryType: data.type,
+            typeFrame: data.typeFrame,
+            price: data.price,
+            countCut: data.countCut,
+            id: item.id
+          };
+          const res = await request("frame/edit-frame", body, "POST");
+          notify(res?.message || "Đã có lỗi xảy ra, vui lòng thử lại sau");
+        }
     } else {
       notify("Vui lòng chọn hình ảnh");
     }
@@ -224,7 +257,10 @@ const CreateFrame = () => {
         {selectedImage && (
           <div>
             <img
-              src={selectedImage?.replace("http://27.71.26.120","https://phototimevn.com")}
+              src={selectedImage?.replace(
+                "http://27.71.26.120",
+                "https://phototimevn.com"
+              )}
               alt="Selected"
               style={{ maxWidth: "15%" }}
             />
