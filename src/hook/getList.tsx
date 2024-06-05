@@ -29,6 +29,7 @@ export function GetList<T>({
   const [data, setData] = useState<T | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<Error | null>(null);
+  console.log("====loading===", loading);
   useEffect(() => {
     getData();
   }, [dependencies, dependencies2, dependencies1]);
@@ -48,6 +49,7 @@ export function GetList<T>({
   };
 
   const getData = async (_page = page, search = "") => {
+    setLoading(true);
     if (isLazy) {
       const respone = await request(url, null, "GET", {
         page: _page,
@@ -65,6 +67,8 @@ export function GetList<T>({
       });
       setData(respone?.data);
     }
+    setLoading(false);
+
   };
   return {
     data,

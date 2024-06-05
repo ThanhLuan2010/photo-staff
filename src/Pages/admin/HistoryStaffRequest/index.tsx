@@ -8,6 +8,7 @@ import { Dropdown } from "../../../component/Dropdow/index.tsx";
 import DateTimePicker from "react-datetime-picker";
 import "react-datetime-picker/dist/DateTimePicker.css";
 import { useNavigate } from "react-router-dom";
+import LoadingWrap from "../../../component/LoadingWrap.tsx";
 
 function HistoryStaffRequest() {
   const [branch, setbranch] = useState<string>("");
@@ -16,7 +17,11 @@ function HistoryStaffRequest() {
 
   const navigate = useNavigate();
 
-  const { data: dataHistory, loadMore } = GetList<any>({
+  const {
+    data: dataHistory,
+    loadMore,
+    loading,
+  } = GetList<any>({
     url: "staff/admin-get-history-request",
     isLazy: true,
     dependencies: branch,
@@ -28,6 +33,7 @@ function HistoryStaffRequest() {
       branch: branch,
     },
   });
+  console.log("=====loadinf=====", loading);
 
   type TypeHistory = {
     name: string;
@@ -51,7 +57,9 @@ function HistoryStaffRequest() {
     return (
       <tr
         key={index}
-        onClick={() => navigate("/admin/detail-request-couon", { state: { item } })}
+        onClick={() =>
+          navigate("/admin/detail-request-couon", { state: { item } })
+        }
         className="w-full py-2 mt-2 text-center text-white bg-red-200 border border-gray-500 cursor-pointer border-3"
       >
         <td className="py-2">{index + 1}</td>
@@ -84,10 +92,12 @@ function HistoryStaffRequest() {
     { title: "TheLoop" },
     { title: "CresenMall" },
     { title: "Vinh" },
+    { title: "THISO" },
+    { title: "VANHANH" },
   ];
 
   return (
-    <div>
+    <LoadingWrap active={loading}>
       <h1 className="mt-10 text-5xl font-semibold text-center text-primary">
         Lịch sử
       </h1>
@@ -179,7 +189,7 @@ function HistoryStaffRequest() {
           previousLabel={"<"}
         />
       </div>
-    </div>
+    </LoadingWrap>
   );
 }
 

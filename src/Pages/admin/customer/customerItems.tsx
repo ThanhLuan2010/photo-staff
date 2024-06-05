@@ -34,7 +34,7 @@ const CustomerItems: React.FC<CustomerProps> = ({ item, index }) => {
     >
       <div className="flex items-center w-full">
         {item?.avatar ? (
-          <img className="w-[40px] h-[40px] rounded-full" src={item?.avatar} />
+          <img className="w-[40px] h-[40px] rounded-full" src={item?.avatar?.replace("http://27.71.26.120","https://phototimevn.com")} />
         ) : (
           <div className="border-[1px] border-[pink] self-start p-1 rounded-full">
             <AiOutlineUser size={30} />

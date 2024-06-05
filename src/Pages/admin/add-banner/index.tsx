@@ -5,7 +5,7 @@ import "react-datetime-picker/dist/DateTimePicker.css";
 import "react-quill/dist/quill.snow.css";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { request } from "../../../api/request.tsx";
+import { BASE_URL, request } from "../../../api/request.tsx";
 import LoadingWrap from "../../../component/LoadingWrap.tsx";
 import React from "react";
 import { useLocation } from "react-router-dom";
@@ -27,10 +27,15 @@ const AddBanner = (props: any) => {
     setLoading(true);
     setSelectedImage(URL.createObjectURL(event.target.files[0]));
     const formData = new FormData();
-    formData.append("file", event.target.files[0]);
+    formData.append("image", event.target.files[0]);
 
     try {
-      const res = await fetch("http://27.71.26.120:8081/Image", {
+      // const res = await fetch("http://27.71.26.120:8081/Image", {
+      //   method: "POST",
+      //   body: formData,
+      //   // dataType: 'jsonp',
+      // });
+      const res = await fetch(`${BASE_URL}upload/upload`, {
         method: "POST",
         body: formData,
         // dataType: 'jsonp',
@@ -56,16 +61,16 @@ const AddBanner = (props: any) => {
     } else {
       if (selectedImage) {
         const body = {
-          name: "",
-          nameEn: "",
-          nameKo: "",
-          description: "",
-          descriptionEn: "",
-          descriptionKo: "",
+          name: "banner",
+          nameEn: "banner",
+          nameKo: "banner",
+          description: "banner",
+          descriptionEn: "banner",
+          descriptionKo: "banner",
           url: selectedImage,
           type: 1,
         };
-        const res = await request("create-home-banner", body, "POST");
+        const res = await request("home/create-home-banner", body, "POST");
         if (res?.status) {
           // navigation('/branch/list')
         }
@@ -97,36 +102,10 @@ const AddBanner = (props: any) => {
             type: 1,
             id: item?.id,
           };
-          const res = await request("edit-home-banner", body, "POST");
+          const res = await request("home/edit-home-banner", body, "POST");
           notify(res?.message || "Đã có lỗi xảy ra, vui lòng thử lại sau");
         } else {
           alert("trống");
-          // const resImg = await request(
-          //   "upload/uploadBase64",
-          //   { file: selectedImage?.replace("data:image/png;base64,", "") },
-          //   "POST"
-          // );
-          // if (resImg?.success) {
-          //   const body = {
-          //     name: _data.name,
-          //     nameEn: _data.nameEn,
-          //     nameKo: _data.nameKo,
-          //     description: _data.description,
-          //     descriptionEn: _data.descriptionEn,
-          //     descriptionKo: _data.descriptionKo,
-          //     url: resImg.data?.url,
-          //     id: data.id,
-          //     timeStart: timeStart,
-          //     timeEnd: timeEnd,
-          //   };
-          //   const res = await request("home/edit-branch", body, "POST");
-          //   if (res?.status) {
-          //     // navigation('/branch/list')
-          //   }
-          //   notify(res?.message || "Đã có lỗi xảy ra, vui lòng thử lại sau");
-          // } else {
-          //   notify(resImg?.message || "Đã có lỗi xảy ra, vui lòng thử lại sau");
-          // }
         }
     } else {
       notify("Vui lòng chọn hình ảnh");
@@ -149,7 +128,7 @@ const AddBanner = (props: any) => {
               <div>
                 <h2>Ảnh đã chọn:</h2>
                 <img
-                  src={selectedImage}
+                  src={selectedImage?.replace("http://27.71.26.120","https://phototimevn.com")}
                   alt="Selected"
                   style={{ maxWidth: "15%" }}
                 />

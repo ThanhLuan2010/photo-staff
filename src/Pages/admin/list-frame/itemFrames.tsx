@@ -15,7 +15,7 @@ const ItemFrame: React.FC<ItemFramesProps> = ({ item, index }) => {
       }}
       className="shadow-lg mt-5 p-2 rounded-md bg-white hover:bg-[pink] cursor-pointer"
     >
-      <img src={item?.url} className="w-full h-[300px] object-contain" />
+      <img src={item?.url?.replace("http://27.71.26.120","https://phototimevn.com")} className="w-full h-[300px] object-contain" />
       <div className="mt-2 text-center">{item?.name}</div>
     </div>
   );

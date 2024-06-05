@@ -214,7 +214,8 @@ export default function NavBar() {
                 dispatch(setIsLogin(false));
                 dispatch(setToken(""));
                 dispatch(setUserInfo({}));
-                navigate("/");
+                navigate("/")
+
               }}
               className="flex items-center self-center text-xl text-white"
             >
