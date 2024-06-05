@@ -124,17 +124,6 @@ const Dashboard = () => {
     setCouponData(respone?.data);
   };
 
-  useEffect(() => {
-    getCard();
-  }, []);
-
-  const [couponData, setCouponData] = useState<CardData[]>([]);
-
-  const getCard = async () => {
-    const respone = await request("coupon/get-coupon-count", null, "GET");
-    setCouponData(respone?.data);
-  };
-
   const onExportFile = (): void => {
     const TotalData = dataCoupon?.recordset?.concat({
       GROUP_ID: "Tổng",

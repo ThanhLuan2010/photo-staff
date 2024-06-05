@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { GetList } from "../../../hook/getList.tsx";
 import moment from "moment";
 import ReactPaginate from "react-paginate";
@@ -11,11 +11,38 @@ import { useNavigate } from "react-router-dom";
 import LoadingWrap from "../../../component/LoadingWrap.tsx";
 
 function HistoryStaffRequest() {
-  const [branch, setbranch] = useState<string>("");
-  const [startDate, setStartDate] = useState<any>(new Date());
-  const [endDate, setEndDate] = useState<any>(new Date());
-
   const navigate = useNavigate();
+  const storedBranch = localStorage.getItem("branch");
+  const storedStartDate = localStorage.getItem("startDate");
+  const storedEndDate = localStorage.getItem("endDate");
+
+  const [branch, setbranch] = useState<string>(
+    storedBranch ? storedBranch : ""
+  );
+  const [startDate, setStartDate] = useState<any>(
+    storedStartDate ? new Date(storedStartDate) : new Date()
+  );
+  const [endDate, setEndDate] = useState<any>(
+    storedEndDate ? new Date(storedEndDate) : new Date()
+  );
+
+  useEffect(() => {
+    if (branch) {
+      localStorage.setItem("branch", branch);
+    }
+  }, [branch]);
+
+  useEffect(() => {
+    if (startDate) {
+      localStorage.setItem("startDate", startDate.toString());
+    }
+  }, [startDate]);
+
+  useEffect(() => {
+    if (endDate) {
+      localStorage.setItem("endDate", endDate.toString());
+    }
+  }, [endDate]);
 
   const {
     data: dataHistory,
@@ -33,7 +60,7 @@ function HistoryStaffRequest() {
       branch: branch,
     },
   });
-  console.log("=====loadinf=====", loading);
+  console.log("=====loading=====", loading);
 
   type TypeHistory = {
     name: string;
@@ -58,7 +85,9 @@ function HistoryStaffRequest() {
       <tr
         key={index}
         onClick={() =>
-          navigate("/admin/detail-request-couon", { state: { item } })
+          navigate("/admin/detail-request-couon", {
+            state: { item, startDate, endDate, branch },
+          })
         }
         className="w-full py-2 mt-2 text-center text-white bg-red-200 border border-gray-500 cursor-pointer border-3"
       >
