@@ -113,7 +113,6 @@ const Dashboard = () => {
       setTotalCouponInstore(total7);
     }
   }, [dataCoupon]);
-  console.log("=====dataCoupon====", dataCoupon);
 
   useEffect(() => {
     getCard();

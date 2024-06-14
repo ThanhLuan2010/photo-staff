@@ -42,6 +42,7 @@ interface IFormInput {
   typeFrame: string;
   price: number;
   countCut: number;
+  note?:string;
 }
 
 type CategoryType = {
@@ -103,6 +104,7 @@ const CreateFrame = () => {
       typeFrame: item?.typeFrame || "",
       price: item?.price || 0,
       countCut: item?.countCut || 0,
+      note: item?.note || "",
     },
     resolver: yupResolver(validationSchemaRegister),
   });
@@ -155,6 +157,7 @@ const CreateFrame = () => {
         typeFrame: data.typeFrame,
         price: data.price,
         countCut: data.countCut,
+        note: data?.note || "",
       };
       if (isUpdate) {
         const res = await request("frame/edit-frame", body, "POST");
@@ -189,7 +192,8 @@ const CreateFrame = () => {
             typeFrame: data.typeFrame,
             price: data.price,
             countCut: data.countCut,
-            id: item.id
+            id: item.id,
+            note: _data?.note || "",
           };
           const res = await request("frame/edit-frame", body, "POST");
           notify(res?.message || "Đã có lỗi xảy ra, vui lòng thử lại sau");
@@ -304,6 +308,17 @@ const CreateFrame = () => {
           type="text"
           className={classInput}
           defaultValue={getValues("countCut")}
+        />
+      </div>
+
+      <div className="mb-3">
+        <div className={classLable}>Ghi chú</div>
+        <input
+          onChange={(value) => handelOnchange(value, "note")}
+          // value={getValues('countCut')}
+          type="text"
+          className={classInput}
+          defaultValue={getValues("note")}
         />
       </div>
 
