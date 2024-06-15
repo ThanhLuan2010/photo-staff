@@ -23,6 +23,7 @@ import { useSelector } from "react-redux";
 import { authSelect } from "./store/slice/auth.slice.tsx";
 import HistoryStaffRequest from "./Pages/admin/HistoryStaffRequest/index.tsx";
 import DetailRequestCouon from "./Pages/admin/DetailRequestCouon/index.tsx";
+import CaptureCount from "./Pages/admin/capture-count/index.tsx";
 function App() {
   const loading = false;
   const { userInfo } = useSelector(authSelect);
@@ -175,7 +176,16 @@ function App() {
                   </MainLayout>
                 }
               />
-
+              <Route
+                exact
+                path="/admin/frames"
+                name="capture count"
+                element={
+                  <MainLayout>
+                    <CaptureCount />
+                  </MainLayout>
+                }
+              />
               <Route
                 exact
                 path="/admin/list-event"

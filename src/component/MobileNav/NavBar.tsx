@@ -61,7 +61,7 @@ const dataRouteAdmin = [
     route: [
       {
         path: "/admin/history-staff-request-coupon",
-        lable: "Lịch sử tạo coupon",
+        lable: "n",
         id: 13,
         icon: <FaHistory />,
       },
@@ -111,6 +111,12 @@ const dataRouteAdmin = [
       {
         path: "/admin/add-category",
         lable: "Thêm danh mục",
+        id: 8,
+        icon: <FaRegImages />,
+      },
+      {
+        path: "/admin/frames",
+        lable: "Thống kê lượng chụp",
         id: 8,
         icon: <FaRegImages />,
       },
@@ -229,7 +235,7 @@ export default function MobileNavBar({ isOpen, setIsOpen }: Props) {
               dispatch(setIsLogin(false));
               dispatch(setToken(""));
               dispatch(setUserInfo({}));
-              navigate("/")
+              navigate("/");
             }}
             className="flex items-center self-center text-xl text-white"
           >
