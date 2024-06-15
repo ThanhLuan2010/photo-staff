@@ -60,7 +60,6 @@ function HistoryStaffRequest() {
       branch: branch,
     },
   });
-  console.log("=====loading=====", loading);
 
   type TypeHistory = {
     name: string;

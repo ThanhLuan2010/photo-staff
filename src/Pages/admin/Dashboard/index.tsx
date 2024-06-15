@@ -113,7 +113,6 @@ const Dashboard = () => {
       setTotalCouponInstore(total7);
     }
   }, [dataCoupon]);
-  console.log("=====dataCoupon====", dataCoupon);
 
   useEffect(() => {
     getCard();
@@ -156,6 +155,7 @@ const Dashboard = () => {
         TOTAL_COUPON: item?.USE_COUPON,
       };
     });
+    
     const worksheet = XLSX.utils.json_to_sheet(finalData);
     // Định nghĩa style cho hàng cuối
     worksheet["A1"].s = {
@@ -187,7 +187,7 @@ const Dashboard = () => {
         <Card lable="Chi nhánh" value={listBranch?.length || 0} />
       </div>
 
-      <div className=" mt-2 ">
+      <div className="mt-2 ">
         {/* {data.map((item, index) => (
           <Card key={index} lable={item.Category} value={item.Count} />
         ))} */}
