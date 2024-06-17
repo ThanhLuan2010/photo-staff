@@ -75,6 +75,7 @@ const CaptureCount = () => {
                 <td className="py-4 px-6">{item.name}</td>
                 <td className="py-4 px-6  flex justify-center">
                   <img
+
                     src={item?.url.replace(
                       "http://27.71.26.120",
                       "https://phototimevn.com"
