@@ -61,7 +61,7 @@ const dataRouteAdmin = [
     route: [
       {
         path: "/admin/history-staff-request-coupon",
-        lable: "n",
+        lable: "Lịch sử tạo coupon",
         id: 13,
         icon: <FaHistory />,
       },
