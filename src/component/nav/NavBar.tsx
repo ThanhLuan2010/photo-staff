@@ -113,6 +113,12 @@ const dataRouteAdmin = [
         id: 8,
         icon: <FaRegImages />,
       },
+      {
+        path: "/admin/frames",
+        lable: "Thống kê lượng chụp",
+        id: 8,
+        icon: <FaRegImages />,
+      },
     ],
   },
 
