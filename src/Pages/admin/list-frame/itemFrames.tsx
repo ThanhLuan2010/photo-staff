@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { request } from "../../../api/request.tsx";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 interface ItemFramesProps {
   item: any;
@@ -8,15 +10,26 @@ interface ItemFramesProps {
 }
 const ItemFrame: React.FC<ItemFramesProps> = ({ item, index }) => {
   const [indexFrame, setindexFrame] = useState(item?.index);
+  const [image, setimage] = useState(item?.url)
   const navigate = useNavigate();
 
-  const handleKeyPress = async(event: any) => {
+  const handleKeyPress = async (event: any) => {
     if (event.key === "Enter") {
-      const res = await request("frame/edit-frame", {index:indexFrame, id:item?.id}, "POST");
-      alert(res?.message)
+      const res = await request(
+        "frame/edit-frame",
+        { index: indexFrame, id: item?.id },
+        "POST"
+      );
+      notify(res?.message);
     }
   };
 
+  useEffect(() => {
+    setindexFrame(item?.index);
+    setimage(item?.url)
+  }, [item]);
+
+  const notify = (title: string) => toast(title);
   return (
     <div className="w-full">
       <div
@@ -27,7 +40,7 @@ const ItemFrame: React.FC<ItemFramesProps> = ({ item, index }) => {
         className="shadow-lg mt-5 p-2 rounded-md bg-white hover:bg-[pink] cursor-pointer"
       >
         <img
-          src={item?.url?.replace(
+          src={image?.replace(
             "http://27.71.26.120",
             "https://phototimevn.com"
           )}
@@ -45,6 +58,7 @@ const ItemFrame: React.FC<ItemFramesProps> = ({ item, index }) => {
           onKeyDown={handleKeyPress}
         />
       </div>
+      <ToastContainer />
     </div>
   );
 };
