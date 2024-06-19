@@ -72,9 +72,10 @@ const Dashboard = () => {
   const [totalCoupon100, setTotalCoupon100] = useState(0);
   const [totalCouponInstore, setTotalCouponInstore] = useState(0);
   const [couponData, setCouponData] = useState<CardData[]>([]);
+  const [dataCouponSort, setDataCouponSort] = useState<any>([]);
 
   useEffect(() => {
-    if (dataCoupon?.recordset?.length > 0) {
+    if (dataCouponSort?.length > 0) {
       let total1 = 0;
       let total2 = 0;
       let total3 = 0;
@@ -83,7 +84,7 @@ const Dashboard = () => {
       let total6 = 0;
       let total7 = 0;
       let total8 = 0;
-      dataCoupon?.recordset?.forEach((item: couponRecord) => {
+      dataCouponSort?.forEach((item: couponRecord) => {
         const temp7 =
           parseInt(item?.USE_COUPON) -
           parseInt(
@@ -112,6 +113,12 @@ const Dashboard = () => {
       setTotalCoupon100(total6);
       setTotalCouponInstore(total7);
     }
+  }, [dataCouponSort]);
+
+  useEffect(() => {
+    const data = dataCoupon?.recordset;
+    const dataSort = data?.sort((a: any, b: any) => a.SALES_QTY - b.SALES_QTY);
+    setDataCouponSort(dataSort);
   }, [dataCoupon]);
 
   useEffect(() => {
@@ -124,7 +131,7 @@ const Dashboard = () => {
   };
 
   const onExportFile = (): void => {
-    const TotalData = dataCoupon?.recordset?.concat({
+    const TotalData = dataCouponSort?.concat({
       GROUP_ID: "Tổng",
       GROUP_NAME: "Cộng:",
       SALES_QTY: totalQuanlity,
@@ -155,7 +162,7 @@ const Dashboard = () => {
         TOTAL_COUPON: item?.USE_COUPON,
       };
     });
-    
+
     const worksheet = XLSX.utils.json_to_sheet(finalData);
     // Định nghĩa style cho hàng cuối
     worksheet["A1"].s = {
@@ -309,9 +316,9 @@ const Dashboard = () => {
                 {moment(date).format("DD/MM/YYYY")}
               </td>
               <td className="border-r-[1px] border-[pink] text-center">
-                {dataCoupon?.recordset?.length > 0 && (
+                {dataCouponSort?.length > 0 && (
                   <div>
-                    {dataCoupon?.recordset?.map((item: any, index: number) => (
+                    {dataCouponSort?.map((item: any, index: number) => (
                       <div
                         className="border-b-[1px] h-[40px] border-[pink] items-center flex justify-center w-[150px] md:w-auto px-3 text-center py-3"
                         key={index + "store"}
@@ -324,9 +331,9 @@ const Dashboard = () => {
                 )}
               </td>
               <td className="border-r-[1px] border-[pink]">
-                {dataCoupon?.recordset?.length > 0 && (
+                {dataCouponSort?.length > 0 && (
                   <div>
-                    {dataCoupon?.recordset?.map((item: any, index: number) => (
+                    {dataCouponSort?.map((item: any, index: number) => (
                       <div
                         className="border-b-[1px] h-[40px] border-[pink] items-center flex justify-center w-[150px] px-3 text-center py-3"
                         key={index + "group"}
@@ -339,9 +346,9 @@ const Dashboard = () => {
                 )}
               </td>
               <td className="border-r-[1px] border-[pink]">
-                {dataCoupon?.recordset?.length > 0 && (
+                {dataCouponSort?.length > 0 && (
                   <div>
-                    {dataCoupon?.recordset?.map((item: any, index: number) => {
+                    {dataCouponSort?.map((item: any, index: number) => {
                       return (
                         <div
                           className="border-b-[1px] h-[40px] border-[pink] items-center flex justify-center w-[100px]"
@@ -358,9 +365,9 @@ const Dashboard = () => {
                 )}
               </td>
               <td className="border-r-[1px] border-[pink]">
-                {dataCoupon?.recordset?.length > 0 && (
+                {dataCouponSort?.length > 0 && (
                   <div>
-                    {dataCoupon?.recordset?.map((item: any, index: number) => {
+                    {dataCouponSort?.map((item: any, index: number) => {
                       return (
                         <div
                           className="border-b-[1px] h-[40px] border-[pink] items-center flex justify-center w-[70px]"
@@ -378,9 +385,9 @@ const Dashboard = () => {
               </td>
 
               <td className="border-r-[1px] border-[pink]">
-                {dataCoupon?.recordset?.length > 0 && (
+                {dataCouponSort?.length > 0 && (
                   <div>
-                    {dataCoupon?.recordset?.map((item: any, index: number) => {
+                    {dataCouponSort?.map((item: any, index: number) => {
                       return (
                         <div
                           className="border-b-[1px] h-[40px] border-[pink] items-center flex justify-center w-[70px]"
@@ -397,9 +404,9 @@ const Dashboard = () => {
                 )}
               </td>
               <td className="border-r-[1px] border-[pink]">
-                {dataCoupon?.recordset?.length > 0 && (
+                {dataCouponSort?.length > 0 && (
                   <div>
-                    {dataCoupon?.recordset?.map((item: any, index: number) => {
+                    {dataCouponSort?.map((item: any, index: number) => {
                       return (
                         <div
                           className="border-b-[1px] h-[40px] border-[pink] items-center flex justify-center w-[70px]"
@@ -416,9 +423,9 @@ const Dashboard = () => {
                 )}
               </td>
               <td className="border-r-[1px] border-[pink]">
-                {dataCoupon?.recordset?.length > 0 && (
+                {dataCouponSort?.length > 0 && (
                   <div>
-                    {dataCoupon?.recordset?.map((item: any, index: number) => {
+                    {dataCouponSort?.map((item: any, index: number) => {
                       return (
                         <div
                           className="border-b-[1px] h-[40px] border-[pink] items-center flex justify-center w-[70px]"
@@ -435,9 +442,9 @@ const Dashboard = () => {
                 )}
               </td>
               <td className="border-r-[1px] border-[pink]">
-                {dataCoupon?.recordset?.length > 0 && (
+                {dataCouponSort?.length > 0 && (
                   <div>
-                    {dataCoupon?.recordset?.map((item: any, index: number) => {
+                    {dataCouponSort?.map((item: any, index: number) => {
                       return (
                         <div
                           className="border-b-[1px] h-[40px] border-[pink] items-center flex justify-center w-[150px]"
@@ -454,9 +461,9 @@ const Dashboard = () => {
                 )}
               </td>
               <td className="border-r-[1px] border-[pink]">
-                {dataCoupon?.recordset?.length > 0 && (
+                {dataCouponSort?.length > 0 && (
                   <div>
-                    {dataCoupon?.recordset?.map((item: any, index: number) => (
+                    {dataCouponSort?.map((item: any, index: number) => (
                       <div
                         className="border-b-[1px] h-[40px] border-[pink] items-center flex justify-center w-[150px]"
                         key={index + "group"}
@@ -478,9 +485,9 @@ const Dashboard = () => {
                 )}
               </td>
               <td className="border-r-[1px] border-[pink]">
-                {dataCoupon?.recordset?.length > 0 && (
+                {dataCouponSort?.length > 0 && (
                   <div className="items-center justify-center flex-col w-[150px]">
-                    {dataCoupon?.recordset?.map((item: any, index: number) => {
+                    {dataCouponSort?.map((item: any, index: number) => {
                       return (
                         <div
                           className="border-b-[1px] h-[40px] border-[pink] items-center flex justify-center"

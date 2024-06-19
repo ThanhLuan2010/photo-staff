@@ -29,7 +29,6 @@ export function GetList<T>({
   const [data, setData] = useState<T | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<Error | null>(null);
-  console.log("====loading===", loading);
   useEffect(() => {
     getData();
   }, [dependencies, dependencies2, dependencies1]);
