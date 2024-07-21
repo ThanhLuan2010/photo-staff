@@ -16,13 +16,19 @@ const CaptureCount = () => {
     const response = await fetch(
       `https://framemanager.phototimevn.com/Frame?limit=10&page=${currentPage}&startDate=${startDate}&endDate=${endDateFormatted}`
     );
+    console.log(
+      "=======",
+      `https://framemanager.phototimevn.com/Frame?limit=10&page=${currentPage}&startDate=${startDate}&endDate=${endDateFormatted}`
+    );
     const data = await response.json();
+    console.log("=====data====",data)
     setData(data);
   };
 
   useEffect(() => {
     fetchData();
   }, [date, endDate, currentPage]);
+
   const startPage = Math.max(1, currentPage - 1);
   const endPage = Math.min(startPage + 3, totalPages);
 
@@ -57,25 +63,24 @@ const CaptureCount = () => {
         <table className="w-full text-sm text-center text-gray-500 dark:text-gray-400">
           <thead className="text-xs text-gray-700 uppercase bg-[#ffc0cb]">
             <tr>
-              <th className="py-3 px-6">Date</th>
-              <th className="py-3 px-6">Name</th>
-              <th className="py-3 px-6">Url</th>
-              <th className="py-3 px-6">Type Frame</th>
-              <th className="py-3 px-6">Price</th>
-              <th className="py-3 px-6">Capture Count</th>
-              <th className="py-3 px-6">Total</th>
+              <th className="px-6 py-3">Date</th>
+              <th className="px-6 py-3">Name</th>
+              <th className="px-6 py-3">Url</th>
+              <th className="px-6 py-3">Type Frame</th>
+              <th className="px-6 py-3">Price</th>
+              <th className="px-6 py-3">Capture Count</th>
+              <th className="px-6 py-3">Total</th>
             </tr>
           </thead>
           <tbody className="bg-pink-50">
             {data.map((item: any, index: number) => (
               <tr key={index} className="border-b-[1px] border-[#ffc0cb]">
-                <td className="py-4 px-6">
+                <td className="px-6 py-4">
                   {moment(date).format("DD/MM/YYYY")}
                 </td>
-                <td className="py-4 px-6">{item.name}</td>
-                <td className="py-4 px-6  flex justify-center">
+                <td className="px-6 py-4">{item.name}</td>
+                <td className="flex justify-center px-6 py-4">
                   <img
-
                     src={item?.url.replace(
                       "http://27.71.26.120",
                       "https://phototimevn.com"
@@ -84,19 +89,19 @@ const CaptureCount = () => {
                     style={{ width: "auto", maxHeight: "50px" }}
                   />
                 </td>
-                <td className="py-4 px-6">{item.typeFrame}</td>
-                <td className="py-4 px-6">{item.price}</td>
-                <td className="py-4 px-6">{item.capureCount}</td>
-                <td className="py-4 px-6">{item.capureCount * item.price}</td>
+                <td className="px-6 py-4">{item.typeFrame}</td>
+                <td className="px-6 py-4">{item.price}</td>
+                <td className="px-6 py-4">{item.capureCount}</td>
+                <td className="px-6 py-4">{item.capureCount * item.price}</td>
               </tr>
             ))}
           </tbody>
         </table>
-        <div className="flex justify-center space-x-2 mt-4">
+        <div className="flex justify-center mt-4 space-x-2">
           <button
             onClick={() => setCurrentPage(1)}
             disabled={currentPage === 1}
-            className="w-8 h-8 rounded-full bg-gray-200 text-black"
+            className="w-8 h-8 text-black bg-gray-200 rounded-full"
           >
             {"<"}
           </button>
@@ -117,7 +122,7 @@ const CaptureCount = () => {
           <button
             onClick={() => setCurrentPage(30)}
             disabled={currentPage === 30}
-            className="w-8 h-8 rounded-full bg-gray-200 text-black"
+            className="w-8 h-8 text-black bg-gray-200 rounded-full"
           >
             {">"}
           </button>

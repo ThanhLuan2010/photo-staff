@@ -46,7 +46,7 @@ const EditUser = () => {
   const { item } = location.state || {}; // Truy cập vào 'id' từ 'state', mặc định là trả về undefined nếu không có state
   const { data: listVoucher, reLoad } = GetList<any>({
     url: `users/Admin-get-user-voucher`,
-    params: { userId: item?.id },
+    params: { userId: item?.id, limit:1000},
   });
 
   const {

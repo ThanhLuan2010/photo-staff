@@ -23,6 +23,8 @@ const validationSchemaRegister = Yup.object().shape({
   typeFrame: Yup.string().required("Vui lòng chọn chọn loại khung"),
   price: Yup.number().required("Vui lòng nhập giá tiền"),
   countCut: Yup.number().required("Vui lòng nhập số ảnh"),
+  programe_category: Yup.string(),
+  thumnail: Yup.string(),
 });
 
 const dataType = [
@@ -42,7 +44,9 @@ interface IFormInput {
   typeFrame: string;
   price: number;
   countCut: number;
-  note?:string;
+  note?: string;
+  programe_category: string;
+  thumnail: string;
 }
 
 type CategoryType = {
@@ -54,8 +58,14 @@ type CategoryType = {
   subCategory: any;
 };
 
+interface IStep {
+  url: string;
+  index: number;
+}
+
 const CreateFrame = () => {
   const [selectedImage, setSelectedImage] = useState<any>(null);
+  const [selectedThumnail, setSelectedThumnail] = useState<any>(null);
   const [isUpdate, setisUpdate] = useState<boolean>(false);
   const [seletedCategory, setseletedCategory] = useState<string>("Chọn loại");
   const [seletedTypeFrame, setseletedTypeFrame] = useState<string>("Chọn loại");
@@ -63,6 +73,7 @@ const CreateFrame = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [startDate, setStartDate] = useState<any>(new Date());
   const [endDate, setEndDate] = useState<any>(new Date());
+  const [step, setstep] = useState<Array<IStep>>([]);
 
   const location = useLocation();
   const { item } = location.state || {};
@@ -90,6 +101,29 @@ const CreateFrame = () => {
     setLoading(false);
   };
 
+  const handleThumnailChange = async (event) => {
+    setLoading(true);
+    setSelectedThumnail(URL.createObjectURL(event.target.files[0]));
+    const formData = new FormData();
+    formData.append("image", event.target.files[0]);
+    try {
+      const res = await fetch(`${BASE_URL}upload/upload`, {
+        method: "POST",
+        body: formData,
+        // dataType: 'jsonp',
+      });
+      const resJson = await res.json();
+      if (resJson?.success) {
+        setSelectedThumnail(resJson?.data?.url);
+      } else {
+        notify(resJson?.message || "Đã có lỗi xảy ra, vui lòng thử lại sau");
+      }
+    } catch (e) {
+      notify("Đã có lỗi xảy ra, vui lòng thử lại sau");
+    }
+    setLoading(false);
+  };
+
   const {
     handleSubmit,
     formState: { errors },
@@ -104,9 +138,11 @@ const CreateFrame = () => {
       typeFrame: item?.typeFrame || "",
       price: item?.price || 0,
       countCut: item?.countCut || 0,
-      note: item?.note || "",
+      programe_category: item?.programe_category || "",
+      thumnail: item?.thumnail || "",
+      note:item?.note || ""
     },
-    resolver: yupResolver(validationSchemaRegister),
+    resolver: yupResolver<any>(validationSchemaRegister),
   });
 
   const notify = (title: string) => toast(title);
@@ -123,7 +159,9 @@ const CreateFrame = () => {
   useEffect(() => {
     if (item && item?.url) {
       setSelectedImage(item?.url);
+      setSelectedThumnail(item?.thumnail);
       setisUpdate(true);
+      setstep(item?.step)
       if (item.timeEnd) {
         setEndDate(moment(item.timeEnd));
       }
@@ -194,6 +232,9 @@ const CreateFrame = () => {
             countCut: data.countCut,
             id: item.id,
             note: _data?.note || "",
+            programe_category: _data?.programe_category || "",
+            thumnail: selectedThumnail,
+            step: step,
           };
           const res = await request("frame/edit-frame", body, "POST");
           notify(res?.message || "Đã có lỗi xảy ra, vui lòng thử lại sau");
@@ -204,12 +245,51 @@ const CreateFrame = () => {
     setLoading(false);
   };
 
+  const setValueStep = (value: any, index: number, field: string) => {
+    let dataStep = step;
+    for (let i = 0; i < dataStep.length; i++) {
+      if (i === index) {
+        dataStep[i][field] = value;
+      }
+    }
+    setstep([...dataStep]);
+  };
+
+  const handleChangeStepImgae = async (event, index, field) => {
+    setLoading(true);
+    const formData = new FormData();
+    formData.append("image", event.target.files[0]);
+    try {
+      const res = await fetch(`${BASE_URL}upload/upload`, {
+        method: "POST",
+        body: formData,
+        // dataType: 'jsonp',
+      });
+      const resJson = await res.json();
+      if (resJson?.success) {
+        // setSelectedThumnail(resJson?.data?.url);
+        let dataStep = step;
+        for (let i = 0; i < dataStep.length; i++) {
+          if (i === index) {
+            dataStep[i][field] = resJson?.data?.url;
+          }
+        }
+        setstep([...dataStep]);
+      } else {
+        notify(resJson?.message || "Đã có lỗi xảy ra, vui lòng thử lại sau");
+      }
+    } catch (e) {
+      notify("Đã có lỗi xảy ra, vui lòng thử lại sau");
+    }
+    setLoading(false);
+  };
+
   const classInput =
     "w-full border-[1px] border-[pink] rounded-md px-2 py-2 outline-none";
   const classLable = "font-semibold text-[pink]";
   return (
     <LoadingWrap active={loading}>
-      <div className="text-center font-bold text-[pink] text-xl">
+      <div  className="text-center font-bold text-[pink] text-xl">
         {isUpdate ? "Sửa Frame" : "Thêm Frame"}
       </div>
       <div className="mb-3">
@@ -363,9 +443,93 @@ const CreateFrame = () => {
         </div>
       </div>
 
-      <div className="flex justify-center mt-10">
+      <div className="mt-10 mb-3">
+        {selectedThumnail && (
+          <div>
+            <img
+              src={selectedThumnail?.replace(
+                "http://27.71.26.120",
+                "https://phototimevn.com"
+              )}
+              alt="Selected"
+              style={{ maxWidth: "15%" }}
+            />
+          </div>
+        )}
+        <div className={classLable}>Thumnail</div>
+        <input
+          onChange={handleThumnailChange}
+          type="file"
+          className={classInput}
+        />
+      </div>
+
+      <div className="mb-3">
+        <div className={classLable}>Category</div>
+        <input
+          onChange={(value) => handelOnchange(value, "programe_category")}
+          type="text"
+          className={classInput}
+          defaultValue={getValues("programe_category")}
+        />
+      </div>
+
+      <div className="mb-3">
+        <div className={classLable}>Step</div>
+        <div className="border-[1px] p-5">
+          {step?.length > 0 &&
+            step?.map((item: IStep, index: number) => (
+              <div key={index} className="flex items-end gap-4 mb-3">
+                <div className="w-1/2">
+                  <p>URL</p>
+                  {
+                    item?.url && <img src={item?.url} className="w-[200px] h=[300px]"/>
+                  }
+                  <input
+                    onChange={(value) =>
+                      handleChangeStepImgae(value, index, "url")
+                    }
+                    // value={item?.url}
+                    type="file"
+                    className={classInput}
+                  />
+                </div>
+
+                <div className="w-1/2">
+                  <p>Index</p>
+                  <input
+                    onChange={(value) =>
+                      setValueStep(value.target.value, index, "index")
+                    }
+                    value={item?.index}
+                    type="text"
+                    className={classInput}
+                  />
+                </div>
+
+                <div className=" text-primary hover:bg-red-500">
+                  <button
+                    onClick={() => setstep(step.filter((s) => s !== item))}
+                    className={classInput}
+                  >
+                    Xoá
+                  </button>
+                </div>
+              </div>
+            ))}
+        </div>
+
         <button
-          className="mb-40 bg-[pink] text-white py-3 px-6 rounded-md"
+          className="mb-4 text-primary border-[1px] rounded-md py-3 px-6 w-full mt-5"
+          onClick={() => setstep(step?.concat({ url: "", index: 0 }))}
+        >
+          {"Thêm step"}
+        </button>
+      </div>
+
+      <div className="flex justify-center">
+        <button
+          className="mb-4 bg-[pink] text-white py-3 px-6 rounded-md"
           onClick={handleSubmit(onSubmit)}
         >
           {isUpdate ? "Sửa Frame" : "Thêm Frame"}

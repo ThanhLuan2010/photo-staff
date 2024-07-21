@@ -48,7 +48,7 @@ const ItemFrame: React.FC<ItemFramesProps> = ({ item, index }) => {
         />
         <div className="mt-2 text-center line-clamp-1">{item?.name}</div>
       </div>
-      <div className="w-auto bg-red-400" onClick={() => {}}>
+      {/* <div className="w-auto bg-red-400" onClick={() => {}}>
         <input
           placeholder="index"
           type="number"
@@ -57,7 +57,7 @@ const ItemFrame: React.FC<ItemFramesProps> = ({ item, index }) => {
           onChange={(e) => setindexFrame(e.target.value)}
           onKeyDown={handleKeyPress}
         />
-      </div>
+      </div> */}
       <ToastContainer />
     </div>
   );

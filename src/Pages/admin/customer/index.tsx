@@ -6,13 +6,14 @@ import { GetList } from "../../../hook/getList.tsx";
 import CustomerItems from "./customerItems.tsx";
 import "./pagination.css";
 import React from "react";
+import EmptyComponent from "../../../component/EmptyComponent/index.tsx";
 
 interface PageChangeEvent {
   selected: number;
 }
 
 const Customer = () => {
-  const { data, loadMore, search } = GetList<any>({
+  const { data, loadMore, search, loading } = GetList<any>({
     url: "users/getListUser",
     params: { limit: 20 },
     isLazy: true
@@ -34,7 +35,7 @@ const Customer = () => {
   };
 
   return (
-    <div>
+    <div className="px-10">
       <div className="flex justify-center">
         <div
           className="
@@ -65,7 +66,7 @@ const Customer = () => {
         </div>
       </div>
 
-      <div>{data?.data?.length > 0 && data?.data?.map(renderUser)}</div>
+      <div>{data?.data?.length > 0 && !loading ?data?.data?.map(renderUser) : <EmptyComponent loading={loading}/>}</div>
 
       <div
         style={{

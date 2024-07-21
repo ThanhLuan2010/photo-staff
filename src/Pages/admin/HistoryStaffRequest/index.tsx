@@ -122,6 +122,9 @@ function HistoryStaffRequest() {
     { title: "Vinh" },
     { title: "THISO" },
     { title: "VANHANH" },
+    { title: "Metropolis" },
+    { title: "DANANG" },
+    { title: "CrescentMall" },
   ];
 
   return (

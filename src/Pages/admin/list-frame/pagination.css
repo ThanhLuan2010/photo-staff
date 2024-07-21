@@ -34,7 +34,7 @@
   
   .pagination {
     align-items: center;
-    background-color: pink;
+    background-color: transparent;
     display: flex;
     flex-direction: row;
     height: 60px;

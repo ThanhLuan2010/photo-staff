@@ -24,6 +24,7 @@ import { authSelect } from "./store/slice/auth.slice.tsx";
 import HistoryStaffRequest from "./Pages/admin/HistoryStaffRequest/index.tsx";
 import DetailRequestCouon from "./Pages/admin/DetailRequestCouon/index.tsx";
 import CaptureCount from "./Pages/admin/capture-count/index.tsx";
+import Thongke from "./Pages/admin/Thongke.tsx";
 function App() {
   const loading = false;
   const { userInfo } = useSelector(authSelect);
@@ -248,6 +249,14 @@ function App() {
                   <MainLayout>
                     <DetailRequestCouon />
                   </MainLayout>
+                }
+              />
+              <Route
+                exact
+                path="/admin/thong-ke"
+                name="ThongKe"
+                element={
+                  <Thongke/>
                 }
               />
             </>

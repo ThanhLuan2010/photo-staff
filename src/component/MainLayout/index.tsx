@@ -32,7 +32,7 @@ const MainLayout : React.FC<MainLayoutProps> = ({ children }) => {
         >
           <AiOutlineMenu />
         </div>
-        <div className="w-full px-5 mt-10 mb-10">{children}</div>
+        <div className="w-full ">{children}</div>
       </div>
     </div>
   );

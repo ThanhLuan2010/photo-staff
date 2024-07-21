@@ -5,9 +5,10 @@ import { GetList } from "../../../hook/getList.tsx";
 import ItemFrame from "./itemFrames.tsx";
 import "./pagination.css";
 import React from "react";
+import EmptyComponent from "../../../component/EmptyComponent/index.tsx";
 
 const ListFame = () => {
-  const { data, search, loadMore } = GetList<any>({
+  const { data, search, loadMore, loading } = GetList<any>({
     url: "frame/get-list",
     isLazy: true,
   });
@@ -22,7 +23,7 @@ const ListFame = () => {
   };
 
   return (
-    <div className="px-10 bg-pink-200">
+    <div className="px-10 pb-10 bg-pink-200">
       <div className="flex justify-center">
         <div
           className="
@@ -52,9 +53,14 @@ const ListFame = () => {
           </button>
         </div>
       </div>
-      <div className="grid grid-cols-1 gap-3 lg:grid-cols-3 sm:grid-cols-2 xs:grid-cols-1 xl:grid-cols-4">
-        {data?.length > 0 && data?.map(renderFrame)}
-      </div>
+      {data?.length > 0 && !loading ? (
+        <div className="grid grid-cols-1 gap-3 mb-10 lg:grid-cols-3 sm:grid-cols-2 xs:grid-cols-1 xl:grid-cols-4">
+          {data?.map(renderFrame)}
+        </div>
+      ) : (
+        <EmptyComponent loading={loading} />
+      )}
+
       <ReactPaginate
         activeClassName={"item active "}
         breakClassName={"item break-me "}
@@ -67,7 +73,7 @@ const ListFame = () => {
         onPageChange={handlePageChange}
         pageCount={100}
         pageClassName={"item pagination-page "}
-        pageRangeDisplayed={2}
+        pageRangeDisplayed={10}
         previousClassName={"item previous"}
         previousLabel={"<"}
       />
