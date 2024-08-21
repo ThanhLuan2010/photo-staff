@@ -17,7 +17,7 @@ const validationSchemaRegister = Yup.object().shape({
   birdthDay: Yup.string().required("Vui lòng điền ngày sinh"),
   checkin: Yup.string().required("Vui lòng điền số ngày điểm danh"),
   accumulate_points: Yup.string().required("Vui lòng điền số lần tích điểm"),
-  email: Yup.string().required("Vui lòng điền email"),
+  email: Yup.string().optional(),
   phoneNumber: Yup.string().required("Vui lòng điền số điện thoại"),
 });
 interface InputForm {

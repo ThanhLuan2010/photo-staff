@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { GetList } from "../../../hook/getList.tsx";
 import moment from "moment";
-import ReactPaginate from "react-paginate";
 import "./pagination.css";
 import { TypeCouponResult } from "../../RequestCouon/index.tsx";
 import { Dropdown } from "../../../component/Dropdow/index.tsx";
@@ -9,16 +8,25 @@ import DateTimePicker from "react-datetime-picker";
 import "react-datetime-picker/dist/DateTimePicker.css";
 import { useNavigate } from "react-router-dom";
 import LoadingWrap from "../../../component/LoadingWrap.tsx";
+import { Box, Pagination } from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  historySelect,
+  setDataRequestCp,
+} from "../../../store/slice/historyRequestCoupon.slice.tsx";
 
 function HistoryStaffRequest() {
   const navigate = useNavigate();
   const storedBranch = localStorage.getItem("branch");
   const storedStartDate = localStorage.getItem("startDate");
   const storedEndDate = localStorage.getItem("endDate");
-
+  const localPage = localStorage.getItem("page");
+  const dispatch = useDispatch();
   const [branch, setbranch] = useState<string>(
     storedBranch ? storedBranch : ""
   );
+  const [curentPage, setCurentPage] = useState(localPage || 1);
+  const { dataRequestCp } = useSelector(historySelect);
   const [startDate, setStartDate] = useState<any>(
     storedStartDate ? new Date(storedStartDate) : new Date()
   );
@@ -37,6 +45,12 @@ function HistoryStaffRequest() {
       localStorage.setItem("startDate", startDate.toString());
     }
   }, [startDate]);
+
+  useEffect(() => {
+    if (curentPage) {
+      localStorage.setItem("page", curentPage?.toString());
+    }
+  }, [curentPage]);
 
   useEffect(() => {
     if (endDate) {
@@ -61,6 +75,15 @@ function HistoryStaffRequest() {
     },
   });
 
+  useEffect(() => {
+    if (dataHistory?.length > 0) {
+      dispatch(setDataRequestCp(dataHistory));
+    }
+    if (dataHistory?.length === 0 && !loading) {
+      dispatch(setDataRequestCp([]));
+    }
+  }, [dataHistory]);
+
   type TypeHistory = {
     name: string;
     userId: string;
@@ -69,14 +92,6 @@ function HistoryStaffRequest() {
     date: Date;
     branch: string;
     coupon: TypeCouponResult;
-  };
-
-  interface PageChangeEvent {
-    selected: number;
-  }
-
-  const handlePageChange = ({ selected }: PageChangeEvent) => {
-    loadMore(selected + 1);
   };
 
   const renderHistory = (item: TypeHistory, index: number) => {
@@ -126,9 +141,9 @@ function HistoryStaffRequest() {
     { title: "DANANG" },
     { title: "CrescentMall" },
   ];
-
+console.log("====curentPage===",curentPage)
   return (
-    <LoadingWrap active={loading}>
+    <LoadingWrap active={loading && dataRequestCp?.length === 0}>
       <h1 className="mt-10 text-5xl font-semibold text-center text-primary">
         Lịch sử
       </h1>
@@ -140,6 +155,7 @@ function HistoryStaffRequest() {
             placeholder="Chi nhánh"
             onSelectItem={(i) => {
               setbranch(i.title);
+              dispatch(setDataRequestCp([]));
             }}
             filedKey="title"
             value={branch}
@@ -152,7 +168,10 @@ function HistoryStaffRequest() {
             <DateTimePicker
               format={"dd-MM-y"}
               disableClock={true}
-              onChange={setStartDate}
+              onChange={(date) => {
+                setStartDate(date);
+                dispatch(setDataRequestCp([]));
+              }}
               value={startDate}
             />
           </div>
@@ -162,13 +181,16 @@ function HistoryStaffRequest() {
             <DateTimePicker
               format={"dd-MM-y"}
               disableClock={true}
-              onChange={setEndDate}
+              onChange={(date) => {
+                setEndDate(date);
+                dispatch(setDataRequestCp([]));
+              }}
               value={endDate}
             />
           </div>
         </div>
       </div>
-      {dataHistory && dataHistory?.length > 0 ? (
+      {dataRequestCp && dataRequestCp?.length > 0 ? (
         <table className="w-full mt-[10px]">
           <tbody>
             <tr className="w-full font-bold text-center border border-gray-500">
@@ -181,7 +203,7 @@ function HistoryStaffRequest() {
               <td className="flex-1 min-w-[120px]">Trạng Thái</td>
               <td className="flex-1 min-w-[120px]">Chi nhánh</td>
             </tr>
-            {dataHistory.map(renderHistory)}
+            {dataRequestCp.map(renderHistory)}
           </tbody>
         </table>
       ) : (
@@ -192,7 +214,7 @@ function HistoryStaffRequest() {
         </div>
       )}
 
-      <div
+      {/* <div
         style={{
           display: "flex",
           flexDirection: "column",
@@ -219,7 +241,19 @@ function HistoryStaffRequest() {
           previousClassName={"item previous"}
           previousLabel={"<"}
         />
-      </div>
+      </div> */}
+      <Box display={"flex"} justifyContent={"center"} mt={5}>
+        <Pagination
+          page={parseInt(curentPage?.toString())}
+          color="primary"
+          onChange={(e, page) => {
+            loadMore(page);
+            setCurentPage(page);
+            dispatch(setDataRequestCp([]));
+          }}
+          count={1000}
+        />
+      </Box>
     </LoadingWrap>
   );
 }

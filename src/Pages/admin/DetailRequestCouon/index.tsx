@@ -1,25 +1,17 @@
 import { yupResolver } from "@hookform/resolvers/yup";
+import { Box } from "@mui/material";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useSelector } from "react-redux";
+import { useLocation } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import * as Yup from "yup";
-import { BASE_URL, request } from "../../../api/request.tsx";
 import { Dropdown } from "../../../component/Dropdow/index.tsx";
 import LoadingWrap from "../../../component/LoadingWrap.tsx";
 import data from "../../../contains/data.json";
-import { authSelect } from "../../../store/slice/auth.slice.tsx";
-import { useLocation } from "react-router-dom";
 
 type TypeCoupon = {
   couponName: string | null;
   ListPrice: any;
-};
-
-type TypeBody = {
-  typeCoupon: string | null;
-  price: any;
-  reason: any;
 };
 
 const validationSchemaRegister = Yup.object().shape({
@@ -52,17 +44,12 @@ function DetailRequestCouon(): React.JSX.Element {
   const [selectedCoupon, setselectedCoupon] = useState<
     TypeCoupon | null | undefined
   >(null);
-  const [selectedPrice, setselectedPrice] = useState("");
   const [loading, setLoading] = useState(false);
-  const [selectedImage, setSelectedImage] = useState<string | null>(null);
-  const { userInfo } = useSelector(authSelect);
   const location = useLocation();
   const { item } = location.state || {};
-
-  const [couponResult, setcouponResult] = useState<TypeCouponResult | null>(
-    null
-  );
-
+  const [[x, y], setXY] = useState([0, 0]);
+  const [[imgWidth, imgHeight], setSize] = useState([0, 0]);
+  const [showMagnifier, setShowMagnifier] = useState(false);
   const {
     handleSubmit,
     formState: { errors },
@@ -76,36 +63,9 @@ function DetailRequestCouon(): React.JSX.Element {
     resolver: yupResolver(validationSchemaRegister),
   });
 
-  const handleImageChange = async (event) => {
-    setLoading(true);
-    setSelectedImage(URL.createObjectURL(event.target.files[0]));
-    const formData = new FormData();
-    formData.append("image", event.target.files[0]);
-    try {
-      const res = await fetch(`${BASE_URL}upload/upload`, {
-        method: "POST",
-        body: formData,
-      });
-      const resJson = await res.json();
-      if (resJson?.success) {
-        setSelectedImage(resJson?.data?.url);
-      } else {
-        notify(resJson?.message || "Đã có lỗi xảy ra, vui lòng thử lại sau");
-      }
-    } catch (e) {
-      notify("Đã có lỗi xảy ra, vui lòng thử lại sau");
-      console.log("=======e=======", e);
-    }
-    setLoading(false);
-  };
-
   const handelOnchange = (value: any, field: any) => {
     setValue(field, value.target.value);
   };
-
-  const notify = (title: string) => toast(title);
-
-
 
   return (
     <LoadingWrap active={loading}>
@@ -144,11 +104,73 @@ function DetailRequestCouon(): React.JSX.Element {
           </div>
         </div>
 
-        <div className="mt-5">
+        <Box width={1 / 4} height={1 / 4} mt={5}>
           {item?.url && (
-            <img src={item?.url?.replace("http://27.71.26.120","https://phototimevn.com")} className="object-contain w-full" />
+            <div
+              style={{
+                position: "relative",
+              }}
+            >
+              <img
+                src={item?.url?.replace(
+                  "http://27.71.26.120",
+                  "https://phototimevn.com"
+                )}
+                className="object-contain w-full"
+                onMouseEnter={(e) => {
+                  // update image size and turn on magnifier
+                  const elem = e.currentTarget;
+                  const { width, height } = elem.getBoundingClientRect();
+                  setSize([width, height]);
+                  setShowMagnifier(true);
+                }}
+                onMouseMove={(e) => {
+                  // update cursor position
+                  const elem = e.currentTarget;
+                  const { top, left } = elem.getBoundingClientRect();
+
+                  const x = e.pageX - left - window.pageXOffset;
+                  const y = e.pageY - top - window.pageYOffset;
+                  setXY([x, y]);
+                }}
+                onMouseLeave={() => {
+                  // hide magnifier
+                  setShowMagnifier(false);
+                }}
+                alt={"img"}
+              />
+              <div
+                style={{
+                  display: showMagnifier ? "" : "none",
+                  position: "absolute",
+                  // prevent magnifier blocks the mousemove event of img
+                  pointerEvents: "none",
+                  // set size of magnifier
+                  height: `${200}px`,
+                  width: `${200}px`,
+                  // move element center to cursor pos
+                  top: `${y - 200 / 2}px`,
+                  left: `${x - 200 / 2}px`,
+                  opacity: "1", // reduce opacity so you can verify position
+                  border: "1px solid lightgray",
+                  backgroundColor: "white",
+                  backgroundImage: `url('${item?.url?.replace(
+                    "http://27.71.26.120",
+                    "https://phototimevn.com"
+                  )}')`,
+                  backgroundRepeat: "no-repeat",
+
+                  //calculate zoomed image size
+                  backgroundSize: `${imgWidth * 5}px ${imgHeight * 5}px`,
+
+                  //calculate position of zoomed image.
+                  backgroundPositionX: `${-x * 5 + 200 / 2}px`,
+                  backgroundPositionY: `${-y * 5 + 200 / 2}px`,
+                }}
+              ></div>
+            </div>
           )}
-        </div>
+        </Box>
 
         <div className="mt-5">
           <p className="font-bold text-primary">Lý do yêu cầu</p>
@@ -164,7 +186,6 @@ function DetailRequestCouon(): React.JSX.Element {
           )}
         </div>
       </div>
-   
 
       <ToastContainer />
     </LoadingWrap>

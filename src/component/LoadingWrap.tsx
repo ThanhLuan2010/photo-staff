@@ -1,15 +1,26 @@
 import BounceLoader from "react-spinners/BounceLoader";
 import LoadingOverlay from "react-loading-overlay";
 import React from "react";
+import {Box,Backdrop,CircularProgress } from "@mui/material"
 interface LoadinWrapProps {
   active: boolean;
   children: any;
 }
-const LoadingWrap: React.FC<LoadinWrapProps> = ({ active, children }): React.JSX.Element => {
+const LoadingWrap: React.FC<LoadinWrapProps> = ({
+  active,
+  children,
+}): React.JSX.Element => {
   return (
-    <LoadingOverlay active={active} spinner={<BounceLoader />}>
-      {children}
-    </LoadingOverlay>
+    <Box>
+        {children}
+      <Backdrop
+        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={active}
+        // onClick={handleClose}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
+    </Box>
   );
 };
 export default LoadingWrap;

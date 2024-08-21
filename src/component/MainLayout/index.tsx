@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 interface MainLayoutProps {
   children: any;
 }
-const MainLayout : React.FC<MainLayoutProps> = ({ children }) => {
+const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
   const [isOpen, setIsOpen] = React.useState<boolean>(false);
   const { isLogin } = useSelector(authSelect);
   const navigate = useNavigate();
@@ -28,11 +28,11 @@ const MainLayout : React.FC<MainLayoutProps> = ({ children }) => {
       <div className="w-full overflow-y-auto bg-white scrollbar-thin scrollbar-thumb-gray-500 scrollbar-track-gray-100">
         <div
           onClick={() => setIsOpen(true)}
-          className="fixed mx-5 my-5 text-xl cursor-pointer md:hidden text-primary"
+          className="fixed mx-5 my-5 text-xl cursor-pointer md:hidden text-primary mt-[50px]"
         >
-          <AiOutlineMenu />
+          <AiOutlineMenu size={35} />
         </div>
-        <div className="w-full ">{children}</div>
+        <div className="w-full p-[20px] pt-[100px] md:pt-[10px]">{children}</div>
       </div>
     </div>
   );
@@ -40,10 +40,8 @@ const MainLayout : React.FC<MainLayoutProps> = ({ children }) => {
 
 export default MainLayout;
 
-
-
 <>
-header
-<>body</>
-footer
-</>
+  header
+  <>body</>
+  footer
+</>;
