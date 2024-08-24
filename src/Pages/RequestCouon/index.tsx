@@ -91,7 +91,6 @@ function RequestCoupon(): React.JSX.Element {
       }
     } catch (e) {
       notify("Đã có lỗi xảy ra, vui lòng thử lại sau");
-      console.log("=======e=======", e);
     }
     setLoading(false);
   };

@@ -23,5 +23,13 @@
   {
     "couponName": "STUDENT",
     "ListPrice": [{ "price": 20000 }]
+  },
+  {
+    "couponName": "CHECKIN",
+    "ListPrice": [{ "price": 20000 }]
+  },
+  {
+    "couponName": "FREE",
+    "ListPrice": [{ "price": 20000 },{ "price": 50000 },{ "price": 70000 },{ "price": 100000 }]
   }
 ]
