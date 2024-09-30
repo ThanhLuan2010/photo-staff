@@ -140,8 +140,12 @@ function HistoryStaffRequest() {
     { title: "Metropolis" },
     { title: "DANANG" },
     { title: "CrescentMall" },
+    { title: "DongNai" },
+    { title: "ParcMall" },
+    { title: "Lotte_GoVap" },
+    { title: "Thu_Duc" },
+ 
   ];
-console.log("====curentPage===",curentPage)
   return (
     <LoadingWrap active={loading && dataRequestCp?.length === 0}>
       <h1 className="mt-10 text-5xl font-semibold text-center text-primary">
