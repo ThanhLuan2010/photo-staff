@@ -12,8 +12,8 @@ interface PageChangeEvent {
 
 const ListBranch = () => {
   const { data, loadMore, search } = GetList<any>({
-    url: "home/get-list-branch?limit=100",
-    isLazy: false,
+    url: "branch/get-list-branch?limit=100",
+    isLazy: true,
   });
   const [searchValue, setSearchValue] = useState("");
   const searchRef = useRef<HTMLButtonElement>(null);
@@ -64,7 +64,7 @@ const ListBranch = () => {
       </div>
 
       <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 md: lg:grid-cols-3 xl:grid-cols-4">
-        {data?.length > 0 && data?.map(renderUser)}
+        {data?.results?.length > 0 && data?.results?.map(renderUser)}
       </div>
 
       {/* <div

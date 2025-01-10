@@ -53,9 +53,9 @@ const ListFame = () => {
           </button>
         </div>
       </div>
-      {data?.length > 0 && !loading ? (
+      {data?.results?.length > 0 && !loading ? (
         <div className="grid grid-cols-1 gap-3 mb-10 lg:grid-cols-3 sm:grid-cols-2 xs:grid-cols-1 xl:grid-cols-4">
-          {data?.map(renderFrame)}
+          {data?.results?.map(renderFrame)}
         </div>
       ) : (
         <EmptyComponent loading={loading} />

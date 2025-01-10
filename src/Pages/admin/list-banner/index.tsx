@@ -7,7 +7,7 @@ interface PageChangeEvent {
 }
 
 const ListBanner = () => {
-  const { data } = GetList<any>({ url: "home/get-home-banner" });
+  const { data } = GetList<any>({ url: "banner/get-home-banner" });
 
   const renderUser = (item: any, index: number) => {
     return (

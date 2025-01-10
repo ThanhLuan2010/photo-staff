@@ -18,26 +18,17 @@ const validationSchemaRegister = Yup.object().shape({
   checkin: Yup.string().required("Vui lòng điền số ngày điểm danh"),
   accumulate_points: Yup.string().required("Vui lòng điền số lần tích điểm"),
   email: Yup.string().optional(),
-  phoneNumber: Yup.string().required("Vui lòng điền số điện thoại"),
+  phoneNumber: Yup.string().optional(),
 });
 interface InputForm {
   name: string;
   birdthDay: string;
   checkin: string;
   accumulate_points: string;
-  email: string;
-  phoneNumber: string;
+  email?: string;
+  phoneNumber?: string;
 }
 
-interface dataParams {
-  name: string;
-  birdthDay: string;
-  dailyCheckin: any;
-  accumulate_points: any;
-  email: string;
-  phoneNumber: string;
-  id: string;
-}
 const EditUser = () => {
   const [loading, setLoading] = useState(false);
   const [couponName, setcouponName] = useState("");
@@ -46,8 +37,15 @@ const EditUser = () => {
   const { item } = location.state || {}; // Truy cập vào 'id' từ 'state', mặc định là trả về undefined nếu không có state
   const { data: listVoucher, reLoad } = GetList<any>({
     url: `users/Admin-get-user-voucher`,
-    params: { userId: item?.id, limit:1000},
+    params: { userId: item?.id, limit: 1000 },
   });
+
+  const { data: deviceUser, reLoad: reloadDeviceUser }: any = GetList({
+    url: `users/get-device-account?deviceId=${item?.deviceId}`,
+    isLazy: false,
+  });
+
+  console.log("====deviceUser===", deviceUser);
 
   const {
     handleSubmit,
@@ -74,6 +72,24 @@ const EditUser = () => {
 
   const onSubmit = async (_data: any) => {
     setLoading(true);
+    const first = _data.phoneNumber.charAt(0);
+    const second = _data.phoneNumber.charAt(1);
+    let fullPhone = "";
+    //nếu đã nhập mã vùng
+    if (
+      first + second === "84" ||
+      first + second === "82" ||
+      first + second === "44"
+    ) {
+      fullPhone = _data.phoneNumber;
+    } else {
+      // nếu bắt đầu bằng 0
+      if (first === "0") {
+        fullPhone = `${84}${_data.phoneNumber?.toString()?.replace("0", "")}`;
+      } else {
+        fullPhone = `${84}${_data.phoneNumber}`;
+      }
+    }
     const body = {
       name: _data.name,
       email: _data.email,
@@ -81,11 +97,13 @@ const EditUser = () => {
       accumulate_points: {
         count: _data.accumulate_points,
       },
+      phoneNumber: fullPhone,
       dailyCheckin: {
         count: _data.checkin,
       },
       userId: item?.id,
     };
+    console.log("====body===", body);
     const res = await request("users/adminChangeInfo", body, "POST");
     if (res?.status) {
       // navigation('/branch/list')
@@ -170,168 +188,253 @@ const EditUser = () => {
     );
   };
 
+  const onUnlock = async (item: any) => {
+    const response = await request(
+      `users/unlock-user?userId=${item?.id}`,
+      {},
+      "POST"
+    );
+    if (response?.status) {
+      toast("Đã mở khoá tải khoản");
+      reloadDeviceUser();
+    } else {
+      toast(response?.message);
+    }
+  };
+  const block = async (item: any) => {
+    const response = await request(
+      `users/block-user?userId=${item?.id}`,
+      {},
+      "POST"
+    );
+    if (response?.status) {
+      toast("Đã khoá tải khoản");
+      reloadDeviceUser();
+    } else {
+      toast(response?.message);
+    }
+    console.log("====response===", response);
+  };
+
+  const renderListDeviceUser = (item: any, index: number) => {
+    return (
+      <tr className="" key={index + "coupon"}>
+        <td className="border-[1px] border-[pink] text-center">{index + 1}</td>
+        <td className="border-[1px] border-[pink] text-center">{item?.name}</td>
+        <td className="border-[1px] border-[pink] text-center">
+          {item?.phoneNumber}
+        </td>
+        <td className="border-[1px] border-[pink] text-center">
+          {item?.email}
+        </td>
+        <td className="border-[1px] border-[pink] text-center">
+          {!item?.isBlock ? "Hoạt động" : "Khoá"}
+        </td>
+
+        <td className="border-[1px] border-[pink] text-center">
+          {item?.isBlock ? (
+            <button
+              onClick={() => onUnlock(item)}
+              className="bg-red-600 px-5 py-2 rounded-md border-[1px] my-2 text-white"
+            >
+              Mở khoá
+            </button>
+          ) : (
+            <button
+              onClick={() => block(item)}
+              className="bg-red-600 px-5 py-2 rounded-md border-[1px] my-2 text-white"
+            >
+              Khoá
+            </button>
+          )}
+        </td>
+
+        {/* <MyDropdown onDelete={() => onDeleteVoucher(item)} /> */}
+      </tr>
+    );
+  };
+
   return (
-      <LoadingWrap active={loading}>
-        <div className="w-full">
-          <strong className="text-center text-[pink]">
-            Thông tin người dùng
-          </strong>
-          <div className="my-4 text-[pink] flex-col w-full">
-            <div className="font-bold">Tên người dùng</div>
-            <input
-              onChange={(value) => handelOnchange(value, "name")}
-              placeholder="Nhập tên người dùng"
-              defaultValue={getValues("name")}
-              className="border-[1px] border-[pink] rounded-lg p-2 outline-none w-full"
-            />
-            <div>
-              {errors?.name ? (
-                <div style={{ color: "red" }}>{errors.name?.message}</div>
-              ) : null}
-            </div>
+    <LoadingWrap active={loading}>
+      <div className="w-full">
+        <strong className="text-center text-[pink]">
+          Thông tin người dùng
+        </strong>
+        <div className="my-4 text-[pink] flex-col w-full">
+          <div className="font-bold">Tên người dùng</div>
+          <input
+            onChange={(value) => handelOnchange(value, "name")}
+            placeholder="Nhập tên người dùng"
+            defaultValue={getValues("name")}
+            className="border-[1px] border-[pink] rounded-lg p-2 outline-none w-full"
+          />
+          <div>
+            {errors?.name ? (
+              <div style={{ color: "red" }}>{errors.name?.message}</div>
+            ) : null}
           </div>
+        </div>
 
+        <div className="my-4 text-[pink] flex-col w-full">
+          <div className="font-bold">Ngày sinh</div>
+          <input
+            onChange={(value) => handelOnchange(value, "birdthDay")}
+            placeholder="Nhập ngày sinh"
+            defaultValue={getValues("birdthDay")}
+            className="border-[1px] border-[pink] rounded-lg p-2 outline-none w-full"
+          />
+          <div>
+            {errors?.birdthDay ? (
+              <text style={{ color: "red" }}>{errors.birdthDay?.message}</text>
+            ) : null}
+          </div>
+        </div>
+
+        <div className="flex gap-4 xs:flex-col sm:flex-col md:flex-row lg:flex-row xl:flex-row 2xl:flex-row">
           <div className="my-4 text-[pink] flex-col w-full">
-            <div className="font-bold">Ngày sinh</div>
+            <div className="font-bold">Số lần tích điểm</div>
             <input
-              onChange={(value) => handelOnchange(value, "birdthDay")}
-              placeholder="Nhập ngày sinh"
-              defaultValue={getValues("birdthDay")}
+              onChange={(value) => handelOnchange(value, "accumulate_points")}
+              placeholder="Số lần tích điểm"
+              // defaultValue={}
               className="border-[1px] border-[pink] rounded-lg p-2 outline-none w-full"
+              defaultValue={getValues("accumulate_points")}
             />
             <div>
-              {errors?.birdthDay ? (
+              {errors?.accumulate_points ? (
                 <text style={{ color: "red" }}>
-                  {errors.birdthDay?.message}
+                  {errors.accumulate_points?.message}
                 </text>
               ) : null}
             </div>
           </div>
 
-          <div className="flex gap-4 xs:flex-col sm:flex-col md:flex-row lg:flex-row xl:flex-row 2xl:flex-row">
-            <div className="my-4 text-[pink] flex-col w-full">
-              <div className="font-bold">Số lần tích điểm</div>
-              <input
-                onChange={(value) => handelOnchange(value, "accumulate_points")}
-                placeholder="Số lần tích điểm"
-                // defaultValue={}
-                className="border-[1px] border-[pink] rounded-lg p-2 outline-none w-full"
-                defaultValue={getValues("accumulate_points")}
-              />
-              <div>
-                {errors?.accumulate_points ? (
-                  <text style={{ color: "red" }}>
-                    {errors.accumulate_points?.message}
-                  </text>
-                ) : null}
-              </div>
-            </div>
-
-            <div className="my-4 text-[pink] flex-col w-full">
-              <div className="font-bold">Số lần điểm danh</div>
-              <input
-                onChange={(value) => handelOnchange(value, "checkin")}
-                placeholder="Số lần điểm danh"
-                defaultValue={getValues("checkin")}
-                className="border-[1px] border-[pink] rounded-lg p-2 outline-none w-full"
-              />
-              <div>
-                {errors?.checkin ? (
-                  <text style={{ color: "red" }}>
-                    {errors.checkin?.message}
-                  </text>
-                ) : null}
-              </div>
-            </div>
-          </div>
-
           <div className="my-4 text-[pink] flex-col w-full">
-            <div className="font-bold">Email</div>
+            <div className="font-bold">Số lần điểm danh</div>
             <input
-              onChange={(value) => handelOnchange(value, "email")}
-              placeholder="Email"
-              className="border-[1px] border-[pink] rounded-lg p-2 outline-none w-full"
-              defaultValue={getValues("email")}
-            />
-            <div>
-              {errors?.email ? (
-                <text style={{ color: "red" }}>{errors.email?.message}</text>
-              ) : null}
-            </div>
-          </div>
-          <div className="my-4 text-[pink] flex-col w-full">
-            <div className="font-bold">Số điện thoại</div>
-            <input
-              placeholder="Số điện thoại"
-              value={getValues("phoneNumber")}
+              onChange={(value) => handelOnchange(value, "checkin")}
+              placeholder="Số lần điểm danh"
+              defaultValue={getValues("checkin")}
               className="border-[1px] border-[pink] rounded-lg p-2 outline-none w-full"
             />
             <div>
-              {errors?.phoneNumber ? (
-                <text style={{ color: "red" }}>
-                  {errors.phoneNumber?.message}
-                </text>
+              {errors?.checkin ? (
+                <text style={{ color: "red" }}>{errors.checkin?.message}</text>
               ) : null}
             </div>
           </div>
         </div>
-        <button
-          onClick={handleSubmit(onSubmit)}
-          color="primary"
-          className="bg-[pink] px-10 py-3 rounded-md text-white"
-        >
-          Chỉnh sửa
-        </button>
 
+        <div className="my-4 text-[pink] flex-col w-full">
+          <div className="font-bold">Email</div>
+          <input
+            onChange={(value) => handelOnchange(value, "email")}
+            placeholder="Email"
+            className="border-[1px] border-[pink] rounded-lg p-2 outline-none w-full"
+            defaultValue={getValues("email")}
+          />
+          <div>
+            {errors?.email ? (
+              <text style={{ color: "red" }}>{errors.email?.message}</text>
+            ) : null}
+          </div>
+        </div>
+        <div className="my-4 text-[pink] flex-col w-full">
+          <div className="font-bold">Số điện thoại</div>
+          <input
+            placeholder="Số điện thoại"
+            defaultValue={getValues("phoneNumber")}
+            onChange={(value) => handelOnchange(value, "phoneNumber")}
+            // value={getValues("phoneNumber")}
+            className="border-[1px] border-[pink] rounded-lg p-2 outline-none w-full"
+          />
+          <div>
+            {errors?.phoneNumber ? (
+              <text style={{ color: "red" }}>
+                {errors.phoneNumber?.message}
+              </text>
+            ) : null}
+          </div>
+        </div>
+      </div>
+      <button
+        onClick={handleSubmit(onSubmit)}
+        color="primary"
+        className="bg-[pink] px-10 py-3 rounded-md text-white"
+      >
+        Chỉnh sửa
+      </button>
+
+      <div>
         <div className="text-3xl w-full border-t-[2px] mt-10 pt-10 text-[pink]">
-          Thêm Coupon
+          Danh sách tài khoản ({deviceUser?.length})
         </div>
-        <div className="mt-5 mb-3">
-          <div className="font-bold text-[pink]">Tên Coupon</div>
-          <input
-            value={couponName}
-            onChange={(e) => setcouponName(e.target.value)}
-            type="text"
-            className="border-[1px] border-[pink] w-full py-2 rounded-md"
-          />
+        <div>
+          <table className="w-full">
+            <tbody className="w-full">
+              <tr className="border-[1px] w-full border-[pink] text-center">
+                <td className="border-[1px] border-[pink]">#</td>
+                <td className="border-[1px] border-[pink]">Tên</td>
+                <td className="border-[1px] border-[pink]">Só điện thoại</td>
+                <td className="border-[1px] border-[pink]">email</td>
+                <td className="border-[1px] border-[pink]">Trạng thái</td>
+                <td className="border-[1px] border-[pink]">Hành động</td>
+              </tr>
+              {deviceUser?.map(renderListDeviceUser)}
+            </tbody>
+          </table>
         </div>
+      </div>
 
-        <div className="mt-5 mb-3">
-          <div className="font-bold text-[pink]">Mệnh giá</div>
-          <input
-            value={couponAmount}
-            onChange={(e) => setcouponAmount(e.target.value)}
-            type="text"
-            className="border-[1px] border-[pink] w-full py-2 rounded-md"
-          />
-        </div>
+      <div className="text-3xl w-full border-t-[2px] mt-10 pt-10 text-[pink]">
+        Thêm Coupon
+      </div>
+      <div className="mt-5 mb-3">
+        <div className="font-bold text-[pink]">Tên Coupon</div>
+        <input
+          value={couponName}
+          onChange={(e) => setcouponName(e.target.value)}
+          type="text"
+          className="border-[1px] border-[pink] w-full py-2 rounded-md"
+        />
+      </div>
 
-        <div className="mb-3">
-          <button
-            className="bg-[pink] px-10 py-3 rounded-md text-white"
-            onClick={onAddCoupon}
-          >
-            <text>Thêm coupon</text>
-          </button>
-        </div>
-        <div>Danh sách Coupon</div>
-        <table className="w-full">
-          <tbody className="w-full">
-            <tr className="border-[1px] w-full border-[pink] text-center">
-              <td className="border-[1px] border-[pink]">#</td>
-              <td className="border-[1px] border-[pink]">Tên coupon</td>
-              <td className="border-[1px] border-[pink]">Mã Coupon</td>
-              <td className="border-[1px] border-[pink]">Giá tiền</td>
-              <td className="border-[1px] border-[pink]">Ngày hết hạn</td>
-              <td className="border-[1px] border-[pink]">Trạng thái</td>
-              <td className="border-[1px] border-[pink]">Hành động</td>
-            </tr>
-            {listVoucher?.recordset?.length > 0 &&
-              listVoucher?.recordset?.map(renderListUser)}
-          </tbody>
-        </table>
-        <ToastContainer />
-      </LoadingWrap>
+      <div className="mt-5 mb-3">
+        <div className="font-bold text-[pink]">Mệnh giá</div>
+        <input
+          value={couponAmount}
+          onChange={(e) => setcouponAmount(e.target.value)}
+          type="text"
+          className="border-[1px] border-[pink] w-full py-2 rounded-md"
+        />
+      </div>
+
+      <div className="mb-3">
+        <button
+          className="bg-[pink] px-10 py-3 rounded-md text-white"
+          onClick={onAddCoupon}
+        >
+          <text>Thêm coupon</text>
+        </button>
+      </div>
+      <div>Danh sách Coupon</div>
+      <table className="w-full">
+        <tbody className="w-full">
+          <tr className="border-[1px] w-full border-[pink] text-center">
+            <td className="border-[1px] border-[pink]">#</td>
+            <td className="border-[1px] border-[pink]">Tên coupon</td>
+            <td className="border-[1px] border-[pink]">Mã Coupon</td>
+            <td className="border-[1px] border-[pink]">Giá tiền</td>
+            <td className="border-[1px] border-[pink]">Ngày hết hạn</td>
+            <td className="border-[1px] border-[pink]">Trạng thái</td>
+            <td className="border-[1px] border-[pink]">Hành động</td>
+          </tr>
+          {listVoucher?.recordset?.length > 0 &&
+            listVoucher?.recordset?.map(renderListUser)}
+        </tbody>
+      </table>
+      <ToastContainer />
+    </LoadingWrap>
   );
 };
 

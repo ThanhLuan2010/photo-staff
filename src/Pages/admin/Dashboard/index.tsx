@@ -40,10 +40,11 @@ const Dashboard = () => {
   });
   const [date, setdate] = useState<any>(moment().subtract(1, "days"));
   const [endDate, setEndDate] = useState<any>(moment().subtract(1, "days"));
-  const { data: listEvent } = GetList<any>({ url: "home/get-list-event" });
+  const { data: listEvent } = GetList<any>({ url: "event/get-list-event" });
   const { data: listBranch } = GetList<any>({
-    url: "home/get-list-branch",
+    url: "branch/get-list-branch",
     params: { limit: 30 },
+    isLazy:true
   });
   const { data: dataCoupon, reLoad: handleReloadCoupon } =
     GetList<dataCouponType>({
@@ -190,8 +191,8 @@ const Dashboard = () => {
           lable="Người đăng ký app"
           value={coutRegister?.count || 0}
         />
-        <Card lable="Sự kiện" value={listEvent?.length || 0} />
-        <Card lable="Chi nhánh" value={listBranch?.length || 0} />
+        <Card lable="Sự kiện" value={listEvent?.results?.length || 0} />
+        <Card lable="Chi nhánh" value={listBranch?.results?.length || 0} />
       </div>
 
       <div className="mt-2 ">

@@ -13,7 +13,8 @@ interface PageChangeEvent {
 
 const ListEvent = () => {
   const { data, search, loadMore } = GetList<any>({
-    url: "home/get-list-event",
+    url: "event/get-list-event",
+    isLazy:true
   });
   const [searchValue, setSearchValue] = useState("");
   const handlePageChange = ({ selected }: PageChangeEvent) => {
@@ -64,7 +65,7 @@ const ListEvent = () => {
       </div>
 
       <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 md: lg:grid-cols-3 xl:grid-cols-4">
-        {data?.length > 0 && data?.map(renderUser)}
+        {data?.results?.length > 0 && data?.results?.map(renderUser)}
       </div>
 
       <div
