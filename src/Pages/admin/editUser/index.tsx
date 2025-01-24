@@ -45,7 +45,6 @@ const EditUser = () => {
     isLazy: false,
   });
 
-  console.log("====deviceUser===", deviceUser);
 
   const {
     handleSubmit,
@@ -281,6 +280,20 @@ const EditUser = () => {
             onChange={(value) => handelOnchange(value, "birdthDay")}
             placeholder="Nhập ngày sinh"
             defaultValue={getValues("birdthDay")}
+            className="border-[1px] border-[pink] rounded-lg p-2 outline-none w-full"
+          />
+          <div>
+            {errors?.birdthDay ? (
+              <text style={{ color: "red" }}>{errors.birdthDay?.message}</text>
+            ) : null}
+          </div>
+        </div>
+
+        <div className="my-4 text-[pink] flex-col w-full">
+          <div className="font-bold">Mã PIN</div>
+          <input
+            placeholder=""
+            value={item?.smartOTP}
             className="border-[1px] border-[pink] rounded-lg p-2 outline-none w-full"
           />
           <div>
