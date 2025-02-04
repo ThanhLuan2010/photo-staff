@@ -21,9 +21,9 @@ function History() {
     loadMore,
     search,
     loading,
+    totalPage
   } = GetList<any>({
     url: "staff/get-history-request",
-    isLazy: true,
   });
   const navigate = useNavigate();
   const [searchValue, setSearchValue] = useState<string>("");

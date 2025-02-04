@@ -30,15 +30,9 @@ const AddBanner = (props: any) => {
     formData.append("image", event.target.files[0]);
 
     try {
-      // const res = await fetch("http://27.71.26.120:8081/Image", {
-      //   method: "POST",
-      //   body: formData,
-      //   // dataType: 'jsonp',
-      // });
       const res = await fetch(`${BASE_URL}upload/upload`, {
         method: "POST",
         body: formData,
-        // dataType: 'jsonp',
       });
       const resJson = await res.json();
       if (resJson?.success) {

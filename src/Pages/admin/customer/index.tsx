@@ -13,17 +13,17 @@ interface PageChangeEvent {
 }
 
 const Customer = () => {
-  const { data, loadMore, search, loading } = GetList<any>({
-    url: "users/getListUser",
-    params: { limit: 20 },
-    isLazy: true
-  });
+
   const searchRef = useRef<HTMLButtonElement>(null);
   const [searchValue, setSearchValue] = useState("");
   const handlePageChange = ({ selected }: PageChangeEvent) => {
     loadMore(selected + 1);
   };
-
+  const { data, loadMore, search, loading } = GetList<any>({
+    url: "users/getListUser",
+    params: { limit: 20, search:searchValue },
+    isLazy: false
+  });
   const renderUser = (item: any, index: number) => {
     return <CustomerItems item={item} key={index} index={index} />;
   };

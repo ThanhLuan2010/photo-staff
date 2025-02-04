@@ -25,6 +25,8 @@ import HistoryStaffRequest from "./Pages/admin/HistoryStaffRequest/index.tsx";
 import DetailRequestCouon from "./Pages/admin/DetailRequestCouon/index.tsx";
 import CaptureCount from "./Pages/admin/capture-count/index.tsx";
 import Thongke from "./Pages/admin/Thongke.tsx";
+import Device from "./Pages/admin/device/index.tsx";
+import AddDevice from "./Pages/admin/AddDevice/index.tsx";
 function App() {
   const loading = false;
   const { userInfo } = useSelector(authSelect);
@@ -255,8 +257,26 @@ function App() {
                 exact
                 path="/admin/thong-ke"
                 name="ThongKe"
+                element={<Thongke />}
+              />
+              <Route
+                exact
+                path="/admin/list-device"
+                name="Device"
                 element={
-                  <Thongke/>
+                  <MainLayout>
+                    <Device />
+                  </MainLayout>
+                }
+              />
+              <Route
+                exact
+                path="/admin/add-device"
+                name="Add Device"
+                element={
+                  <MainLayout>
+                    <AddDevice />
+                  </MainLayout>
                 }
               />
             </>

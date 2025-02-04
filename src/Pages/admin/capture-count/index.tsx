@@ -16,12 +16,8 @@ const CaptureCount = () => {
     const response = await fetch(
       `https://framemanager.phototimevn.com/Frame?limit=10&page=${currentPage}&startDate=${startDate}&endDate=${endDateFormatted}`
     );
-    console.log(
-      "=======",
-      `https://framemanager.phototimevn.com/Frame?limit=10&page=${currentPage}&startDate=${startDate}&endDate=${endDateFormatted}`
-    );
+   
     const data = await response.json();
-    console.log("=====data====",data)
     setData(data);
   };
 

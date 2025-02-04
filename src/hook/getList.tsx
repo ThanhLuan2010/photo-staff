@@ -24,8 +24,10 @@ export function GetList<T>({
   search: (queryString: string) => void;
   loadMore: (page: number) => void;
   reLoad: () => void;
+  totalPage:number
 } {
   const [page, setPage] = useState(1);
+  const [totalPage, setTotalPage] = useState(0)
   const [data, setData] = useState<T | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<Error | null>(null);
@@ -34,6 +36,7 @@ export function GetList<T>({
   }, [dependencies, dependencies2, dependencies1]);
 
   const search = (searchQuery: string) => {
+
     getData(1, searchQuery);
     setPage(1); // reset to the first page for new search
   };
@@ -48,7 +51,8 @@ export function GetList<T>({
   };
 
   const getData = async (_page = page, search = "") => {
-    setLoading(true);
+    console.log("====searchQuery===",search)
+
     if (isLazy) {
       const respone = await request(url, null, "GET", {
         page: _page,
@@ -56,7 +60,8 @@ export function GetList<T>({
         search,
         ...params,
       });
-      setData(respone?.data);
+      setData(respone?.data?.results);
+      setTotalPage(respone?.data?.totalPages)
     } else {
       const respone = await request(url, null, "GET", {
         // page: _page,
@@ -69,6 +74,7 @@ export function GetList<T>({
     setLoading(false);
 
   };
+
   return {
     data,
     loading,
@@ -76,5 +82,6 @@ export function GetList<T>({
     search,
     reLoad,
     loadMore,
+    totalPage
   };
 }

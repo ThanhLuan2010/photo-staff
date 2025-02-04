@@ -18,7 +18,6 @@ export const Dropdown: React.FC<DropdownProps> = (props) => {
   const closeDropdown = () => {
     setIsOpen(false);
   };
-
   return (
     <div className="w-full">
       <div className="relative">

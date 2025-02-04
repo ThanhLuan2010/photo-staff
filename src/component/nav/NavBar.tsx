@@ -8,6 +8,7 @@ import {
   FaTicketAlt,
   FaUser,
   FaHistory,
+  FaLaptop,
 } from "react-icons/fa";
 import { images } from "../../assets/index.tsx";
 import { useNavigate } from "react-router-dom";
@@ -159,6 +160,18 @@ const dataRouteAdmin = [
       },
     ],
   },
+  {
+    lable: "Thiết bị",
+    id: 7,
+    route: [
+      {
+        path: "/admin/list-device",
+        lable: "Thiết bị",
+        id: 1,
+        icon: <FaLaptop />,
+      },
+    ],
+  },
 ];
 
 export default function NavBar() {
@@ -182,7 +195,7 @@ export default function NavBar() {
           {dataNav.map((item, index) => {
             return (
               <div className="px-5 py-0 rounded-xl" key={index + "navRoute"}>
-                {item.route.length > 1 && (
+                {item.route.length > 0 && (
                   <div className="mt-5 font-bold">{item.lable}</div>
                 )}
                 <div>

@@ -17,10 +17,6 @@
     "ListPrice": [{ "price": 70000 }]
   },
   {
-    "couponName": "GIGA",
-    "ListPrice": [{ "price": 20000 }]
-  },
-  {
     "couponName": "STUDENT",
     "ListPrice": [{ "price": 20000 }]
   },
@@ -30,6 +26,6 @@
   },
   {
     "couponName": "FREE",
-    "ListPrice": [{ "price": 20000 },{ "price": 50000 },{ "price": 70000 },{ "price": 100000 }]
+    "ListPrice": [{ "price": 20000 },{ "price": 50000 },{ "price": 70000 },{ "price": 80000 },{ "price": 100000 },{ "price": 110000 }]
   }
 ]

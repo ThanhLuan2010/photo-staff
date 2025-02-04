@@ -12,7 +12,7 @@ interface PageChangeEvent {
 }
 
 const ListEvent = () => {
-  const { data, search, loadMore } = GetList<any>({
+  const { data, search, loadMore,totalPage } = GetList<any>({
     url: "event/get-list-event",
     isLazy:true
   });
@@ -89,7 +89,7 @@ const ListEvent = () => {
           nextClassName={"item next "}
           nextLabel={">"}
           onPageChange={handlePageChange}
-          pageCount={20}
+          pageCount={totalPage}
           pageClassName={"item pagination-page "}
           pageRangeDisplayed={2}
           previousClassName={"item previous"}

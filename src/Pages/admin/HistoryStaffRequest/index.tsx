@@ -64,7 +64,7 @@ function HistoryStaffRequest() {
     loading,
   } = GetList<any>({
     url: "staff/admin-get-history-request",
-    isLazy: true,
+    isLazy: false,
     dependencies: branch,
     dependencies1: startDate,
     dependencies2: endDate,
@@ -144,6 +144,15 @@ function HistoryStaffRequest() {
     { title: "ParcMall" },
     { title: "Lotte_GoVap" },
     { title: "Thu_Duc" },
+    { title: "Hue" },
+    { title: "CHUA_LANG" },
+    { title: "BAC_NINH" },
+    { title: "NHA_TRANG" },
+    { title: "HAI_PHONG" },
+    { title: "PXL" },
+    { title: "Central Premium" },
+    { title: "NHH_HOAN_KIEM" },
+    { title: "CAN_THO" },
  
   ];
   return (

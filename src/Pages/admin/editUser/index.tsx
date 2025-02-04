@@ -26,7 +26,7 @@ interface InputForm {
   checkin: string;
   accumulate_points: string;
   email?: string;
-  phoneNumber?: string;
+  phoneNumber: string;
 }
 
 const EditUser = () => {
@@ -325,9 +325,25 @@ const EditUser = () => {
           <div className="my-4 text-[pink] flex-col w-full">
             <div className="font-bold">Số lần điểm danh</div>
             <input
-              onChange={(value) => handelOnchange(value, "checkin")}
-              placeholder="Số lần điểm danh"
-              defaultValue={getValues("checkin")}
+              onChange={(value) => handelOnchange(value, "email")}
+              placeholder="Email"
+              className="border-[1px] border-[pink] rounded-lg p-2 outline-none w-full"
+              defaultValue={getValues("email")}
+            />
+            <div>
+              {errors?.email ? (
+                <text style={{ color: "red" }}>{errors.email?.message}</text>
+              ) : null}
+            </div>
+          </div>
+
+          <div className="my-4 text-[pink] flex-col w-full">
+            <div className="font-bold">Số điện thoại</div>
+            <input
+              placeholder="Số điện thoại"
+              // value={getValues("phoneNumber")}
+              defaultValue={getValues("phoneNumber")}
+              onChange={(value) => handelOnchange(value, "phoneNumber")}
               className="border-[1px] border-[pink] rounded-lg p-2 outline-none w-full"
             />
             <div>
